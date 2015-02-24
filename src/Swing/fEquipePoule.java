@@ -25,6 +25,8 @@ public class fEquipePoule extends javax.swing.JDialog {
     
     /**
      * Creates new form fEquipePoule
+     * @param parent
+     * @param modal
      */
     public fEquipePoule(java.awt.Frame parent, boolean modal) {
         

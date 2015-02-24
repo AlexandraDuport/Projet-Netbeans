@@ -15,7 +15,8 @@ import javax.swing.text.TableView.TableRow;
 public class fElimination extends javax.swing.JDialog {
 
     DefaultTableModel table;
-    private Elimination elimination;
+    private final Elimination elimination;
+    private fTournoiElimination saisieMatchElimination;
     
 //CONSTRUCTEUR
     public fElimination(java.awt.Frame parent, boolean modal) {
@@ -27,10 +28,7 @@ public class fElimination extends javax.swing.JDialog {
         table = (DefaultTableModel) tElimination.getModel();
         
         for (int i=0 ; i< elimination.getEquipesEli().size() ; i++) {
-            if (elimination.getEquipesEli() == null){
-                lVerif.setText("ListeVide");
-            }
-            table.addRow(new Object[] {elimination.getEquipesEli().get(i).getDescription()});
+              table.addRow(new Object[] {elimination.getEquipesEli().get(i).getDescription()});
         }
     }
 
@@ -50,8 +48,8 @@ public class fElimination extends javax.swing.JDialog {
         bPrecedent1 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tElimination = new javax.swing.JTable();
-        lVerif = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
+        bStart = new javax.swing.JButton();
 
         bPrecedent.setText(" < Précédent");
         bPrecedent.addActionListener(new java.awt.event.ActionListener() {
@@ -118,57 +116,65 @@ public class fElimination extends javax.swing.JDialog {
         });
         jScrollPane1.setViewportView(tElimination);
 
-        lVerif.setText("       ");
-
         jLabel2.setText("Liste des équipes du tournoi:");
+
+        bStart.setText("Commencer !");
+        bStart.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bStartActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(bPrecedent1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(bRetourAccueil)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(bExit1)
-                .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(40, 40, 40)
-                .addComponent(lVerif)
-                .addGap(61, 61, 61))
-            .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(110, 110, 110)
-                        .addComponent(jLabel1))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(110, 110, 110)
+                                .addComponent(jLabel1))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(21, 21, 21)
+                                .addComponent(jLabel2)))
+                        .addGap(0, 70, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(21, 21, 21)
-                        .addComponent(jLabel2)))
-                .addContainerGap(80, Short.MAX_VALUE))
+                        .addContainerGap()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(bPrecedent1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(bStart)))
+                        .addGap(47, 47, 47)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(bRetourAccueil, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(bExit1, javax.swing.GroupLayout.Alignment.TRAILING))))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(105, 105, 105)
-                        .addComponent(lVerif))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel1)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap()
+                .addComponent(jLabel1)
                 .addGap(18, 18, 18)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(bRetourAccueil)
+                        .addGap(73, 73, 73)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(bExit1)
-                    .addComponent(bRetourAccueil)
-                    .addComponent(bPrecedent1))
+                    .addComponent(bPrecedent1)
+                    .addComponent(bStart))
                 .addContainerGap())
         );
 
@@ -222,6 +228,12 @@ public class fElimination extends javax.swing.JDialog {
         setVisible(false);
     }//GEN-LAST:event_bPrecedent1ActionPerformed
 
+    private void bStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bStartActionPerformed
+        saisieMatchElimination = new fTournoiElimination(((fAccueil)getParent()), false);
+        //this.setVisible(false);
+        saisieMatchElimination.setVisible(true);
+    }//GEN-LAST:event_bStartActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -266,10 +278,10 @@ public class fElimination extends javax.swing.JDialog {
     private javax.swing.JButton bPrecedent1;
     private javax.swing.JButton bRetour;
     private javax.swing.JButton bRetourAccueil;
+    private javax.swing.JButton bStart;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JLabel lVerif;
     private javax.swing.JTable tElimination;
     // End of variables declaration//GEN-END:variables
 }

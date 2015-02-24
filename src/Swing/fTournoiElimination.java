@@ -3,8 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package Swing;
+
+import Console.Elimination;
+import static Console.Elimination.tabSize;
+import Console.Equipe;
+import java.awt.Color;
+import java.awt.Component;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 
 /**
  *
@@ -12,12 +21,41 @@ package Swing;
  */
 public class fTournoiElimination extends javax.swing.JDialog {
 
+    private final Elimination elimination;
+    private final DefaultTableModel table;
+    private Color couleur;
+
     /**
      * Creates new form fTournois
+     *
+     * @param parent
+     * @param modal
      */
     public fTournoiElimination(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+
+        tpAffichageGagnant.setVisible(false); // on n'affiche pas encore le TextPane qui va dire le gagnant du tournoi
+        
+        
+        elimination = ((fAccueil) getParent()).getElimination();
+
+        table = (DefaultTableModel) tElimination.getModel();
+        couleur = Color.RED;
+        for (int i = 0; i < elimination.getEquipesEli().size(); i++) {
+            tElimination.getCellRenderer(i * 2, 0).getTableCellRendererComponent(tElimination, elimination.getEquipesEli().get(i).getDescription(), true, true, i, 0).setBackground(couleur);
+            //tElimination.getCellRenderer(i, 1).getTableCellRendererComponent(tElimination, "", true, true, i, 1).setBackground(couleur);
+
+            table.addRow(new Object[]{elimination.getEquipesEli().get(i).getDescription()});
+
+//            if (i % 2 == 0) {
+//                if (couleur == Color.RED) {
+//                    couleur = Color.cyan;
+//                } else {
+//                    couleur = Color.RED;
+//                }
+//            }
+        }
     }
 
     /**
@@ -29,21 +67,162 @@ public class fTournoiElimination extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tElimination = new javax.swing.JTable();
+        bExit = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        bValider = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tpAffichageGagnant = new javax.swing.JTextPane();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+
+        tElimination.setBackground(new java.awt.Color(0, 255, 255));
+        tElimination.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Nouveau  Tour !", "Scores :"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, true
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tElimination.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
+        jScrollPane1.setViewportView(tElimination);
+
+        bExit.setText("Exit");
+        bExit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bExitActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabel1.setText("Saisie des scores");
+
+        bValider.setIcon(new javax.swing.ImageIcon("D:\\Photos\\42.gif")); // NOI18N
+        bValider.setText("Valider les scores et passer au tour suivant");
+        bValider.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bValiderActionPerformed(evt);
+            }
+        });
+
+        jScrollPane2.setViewportView(tpAffichageGagnant);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(274, 274, 274)
+                .addComponent(jLabel1)
+                .addContainerGap(360, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(25, 25, 25)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 218, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(71, 71, 71)
+                        .addComponent(jScrollPane2)
+                        .addGap(79, 79, 79))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(bValider)
+                        .addGap(18, 18, 18)
+                        .addComponent(bExit)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 77, Short.MAX_VALUE)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 353, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(108, 108, 108)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(bExit)
+                    .addComponent(bValider, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void bExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bExitActionPerformed
+        System.exit(0);
+    }//GEN-LAST:event_bExitActionPerformed
+
+    private void bValiderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bValiderActionPerformed
+        //transfo de la liste en tableau
+        Equipe tabInitial[] = elimination.getEquipesEli().toArray(new Equipe[elimination.getEquipesEli().size()]);
+        //a cet endroit on a un tableau fixe d'équipes
+
+        //appliquer lancerTour(Equipe[])
+        //**********************************************RECUP ET /ADAPTATION\ DE L'ALGO QUI EST DANS Elimination
+        while (tabInitial.length > 1) {
+            int i = 0;// incrémenteur tableau initial
+            int j = 0;// incrémenteur tableau du tour suivant
+            Equipe tabSuivant[] = new Equipe[tabSize(tabInitial)];// tableau du tour
+
+            // suivant
+            TableColumn col = new TableColumn();
+            col.setHeaderValue("Nouveau Tour");
+            table.addColumn(col);
+            
+            int compteurTour =2; // pour savoir a quelle colonne on va rajouter le getDescription de l'équipe gagnante
+            
+            // cas d'un tableau impair
+            if ((tabInitial.length) % 2 != 0) {
+			// On cherche le champion avec le meilleur goal average et on le
+                // place automatiquement dans la première case du tableau suivant
+                tabSuivant[0] = elimination.best(tabInitial);
+                j = 1; // incrémenteur du tableau suivant passe à 1
+                
+                table.setValueAt(tabSuivant[0].getDescription(), 0, compteurTour); // on met en première position l'es qui a le meilleur goalAverage
+            }
+
+            while (i < (tabInitial.length) && (j < (tabSuivant.length))) {
+
+                // affectation des points de tournois et de match
+                elimination.pasEgalite(tabInitial[i], tabInitial[i + 1]);
+                tabSuivant[j] = elimination.teamGagnante(tabInitial[i], tabInitial[i + 1]);
+                // passage au prochain match du meme tour
+                i = i + 2;
+                // passage a la prochaine case du tableau du tour suivant
+                j++;
+                table.setValueAt(tabSuivant[j].getDescription(), 0, compteurTour);
+                compteurTour++;
+
+            }
+
+		//enregistrement du tableau initial renseigné
+            //unRecord.recordTournois(tabInitial);
+            // affichage du gagnant du tournois final
+            if (tabSuivant.length == 1) {
+                tpAffichageGagnant.setText("Le gagnant du tournoi est " + tabSuivant[0].getDescription());
+
+			//le contenu du fichier d'enregistrement s'efface
+                //unRecord.effaceTournois();
+                ///!\ EN TRAVAUX dans enregistrement	
+            }
+        }
+        //**********************************************
+    }//GEN-LAST:event_bValiderActionPerformed
 
     /**
      * @param args the command line arguments
@@ -89,5 +268,12 @@ public class fTournoiElimination extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton bExit;
+    private javax.swing.JButton bValider;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTable tElimination;
+    private javax.swing.JTextPane tpAffichageGagnant;
     // End of variables declaration//GEN-END:variables
 }
