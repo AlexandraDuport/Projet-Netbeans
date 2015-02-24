@@ -16,7 +16,7 @@ public class Execution {
 	private static Scanner scNom;
 	private static Scanner scNbJoueurs;
 	private static Scanner scChoix;
-	
+
 	private static Scanner scRecord;
 	private static String record;
 	private static Scanner teamSelection;
@@ -25,8 +25,7 @@ public class Execution {
 
 		int compteur = 0; // compteur du nombre d'equipes crées
 		// Chargement des fichiers textes
-		Enregistrements unRecord = new Enregistrements("Equipes.txt",
-				"Tournois.txt");
+		Enregistrements unRecord = new Enregistrements("Equipes.txt");
 
 		// affichage de bienvenue
 		System.out
@@ -246,19 +245,19 @@ public class Execution {
 								// à cet endroit on a une liste de
 								// poules.[[poule1]] [[poule2]] [[poule3]] ...
 
-								
-								//affichage de toutes les poules
+								// affichage de toutes les poules
 								tournoiPoule.affichagePoule();
 								// organisation des matchs pour chaque poule du
 								// tableau de poules
 								for (int j = 0; j < tournoiPoule
 										.getListePoulesTournoi().size(); j++) {
 									tournoiPoule.matchPoule(tournoiPoule
-											.getListePoulesTournoi().get(j));							
+											.getListePoulesTournoi().get(j));
 								}
-								
-								//affichage des poules apres les matchs
-								System.out.println("Voici la répartition de vous poules");
+
+								// affichage des poules apres les matchs
+								System.out
+										.println("Voici la répartition de vous poules");
 								tournoiPoule.affichagePoule();
 
 								// creation d'une liste vide pour recueillir les
@@ -285,8 +284,9 @@ public class Execution {
 									// on démarre le tournois
 									Equipe[] tabInitial = tournoiElimi
 											.startTournois();
-									
-									System.out.println("Debut de la phase d'elimination !");
+
+									System.out
+											.println("Debut de la phase d'elimination !");
 									tournoiElimi.affichage(tabInitial);
 
 									while (tabInitial.length > 1) {
@@ -317,7 +317,7 @@ public class Execution {
 							break;
 
 						}
-					} while (tournoiPoule.getListeEquipesPoule().size() %4 != 0);
+					} while (tournoiPoule.getListeEquipesPoule().size() % 4 != 0);
 				} while (choixP.matches("C") == false);
 
 				// déroulement des tour jusqu'a trouver le gagnant
@@ -343,124 +343,129 @@ public class Execution {
 		scRecord = new Scanner(System.in);
 		System.out
 				.println("Souhaitez vous utiliser une equipe deja enregistree ? (O)ui ? ou (N)on ?");
+		do {
+			record = scRecord.nextLine();
 
-		record = scRecord.nextLine();
+			boolean indicateur = false;
+			switch (record) {
 
-		boolean indicateur = false;
-		switch (record) {
+			case "O":
+				System.out
+						.println("Veuillez selectionner l'equipe que vous voulez ajouter a votre tournois en tapant son nom ou (A)nnuler pour choisir d'entrer une nouvelle equipe");
+				// affichage des equipes disponibles
+				unRecord.afficherListeEquipes();
 
-		case "O":
-			System.out
-					.println("Veuillez selectionner l'equipe que vous voulez ajouter a votre tournois en tapant son nom ou (A)nnuler pour choisir d'entrer une nouvelle equipe");
-			// affichage des equipes disponibles
-			unRecord.afficherListeEquipes();
+				// Selection d'equipes
 
-			// Selection d'equipes
+				do {
+					// booleen qui indique si la selection a marché
+					// ou non
 
-			do {
-				// booleen qui indique si la selection a marché
-				// ou non
-				
-				
-				try {
-					 teamSelection = new Scanner(System.in);
-					String selection="";
-					selection = teamSelection.nextLine();
+					try {
+						teamSelection = new Scanner(System.in);
+						String selection = "";
+						selection = teamSelection.nextLine();
 
-					// recherche de l'equipe demandée dans le
-					// fichier et ajout dans la liste du
-					// tournois si celle ci ne figure pas deja
-					// dans le tournois
-					Equipe e = unRecord.rechercheEquipe(selection);
+						// recherche de l'equipe demandée dans le
+						// fichier et ajout dans la liste du
+						// tournois si celle ci ne figure pas deja
+						// dans le tournois
+						if (selection.matches("A")==true){
+							break;
+						}
+						Equipe e = unRecord.rechercheEquipe(selection);
 
-					// dans le cas d'une elimination directe
-					if ((tournoiElimi != null)
-							&& (tournoiElimi.rechercheEquipe(e
-									.getDescription()) == false)) {
-						tournoiElimi.addTeamEli(e.getDescription(),
-								e.getNbJoueurs());
+						// dans le cas d'une elimination directe
+						if ((tournoiElimi != null)
+								&& (tournoiElimi.rechercheEquipe(e
+										.getDescription()) == false)) {
+							tournoiElimi.addTeamEli(e.getDescription(),
+									e.getNbJoueurs());
 
-						System.out.println("Vous venez d'ajouter l'equipe "
-								+ e.getDescription() + " a votre tournois!");
+							System.out
+									.println("Vous venez d'ajouter l'equipe "
+											+ e.getDescription()
+											+ " a votre tournois!");
 
-						// indicateur a vrai pour passer a autre
-						// chose
-						compteur++;
-						System.out.println("Il y'a " + compteur
-								+ " equipes dans votre tournoi");
-						indicateur = true;
-					}
+							// indicateur a vrai pour passer a autre
+							// chose
+							compteur++;
+							System.out.println("Il y'a " + compteur
+									+ " equipes dans votre tournoi");
+							indicateur = true;
+						}
 
-					// dans le cas d'une poule
-					else if ((tournoiPoule != null)
-							&& (tournoiPoule.rechercheEquipe(e
-									.getDescription()) ==false)) {
-						tournoiPoule.addTeamPoule(e.getDescription(),
-								e.getNbJoueurs());
-						System.out.println("Vous venez d'ajouter l'equipe "
-								+ e.getDescription() + " a votre tournois!");
+						// dans le cas d'une poule
+						else if ((tournoiPoule != null)
+								&& (tournoiPoule.rechercheEquipe(e
+										.getDescription()) == false)) {
+							tournoiPoule.addTeamPoule(e.getDescription(),
+									e.getNbJoueurs());
+							System.out
+									.println("Vous venez d'ajouter l'equipe "
+											+ e.getDescription()
+											+ " a votre tournois!");
 
-						// indicateur a vrai pour passer a autre
-						// chose
-						compteur++;
-						System.out.println("Il y'a " + compteur
-								+ " equipes dans votre tournoi");
-						indicateur = true;
-					}
+							// indicateur a vrai pour passer a autre
+							// chose
+							compteur++;
+							System.out.println("Il y'a " + compteur
+									+ " equipes dans votre tournoi");
+							indicateur = true;
+						}
 
-					else {
+						else {
+							System.out
+									.println("Cette equipe fait déjà partie du tournois");
+						}
+
+						break;
+					} catch (NullPointerException saisieFausse) {
 						System.out
-								.println("Cette equipe fait déjà partie du tournois");
+								.println("Cette equipe n'existe pas. Veuillez retaper votre selection : ");
 					}
 
-					break;
-				} catch (NullPointerException saisieFausse) {
-					System.out
-							.println("Cette equipe n'existe pas. Veuillez retaper votre selection : ");
-				}
+				} while (indicateur == false);
 
-				
-			} while (indicateur == false);
+				break;
 
-			break;
+			case "N":
+				break;
 
-		case "N":
-			break;
+			default:
+				System.out
+						.println("Erreur de saisie tapez (O) pour OUI et (N) pour non");
+				break;
+			}
 
-		default:
-			System.out
-					.println("Erreur de saisie tapez O pour OUI et N pour non");
-			break;
-		}
-		while ((record.matches("O") == false) && (record.matches("N") == false))
-			;
+		} while ((record.matches("O") == false)
+				&& (record.matches("N") == false));
 		return record;
 	}
-
-
 
 	public static void recordNewTeam(Equipe e, Enregistrements unRecord)
 			throws FileNotFoundException, IOException {
 		if (unRecord.rechercheEquipe(e.getDescription()) == null) {
 			System.out
 					.println("Desirez vous enregistrer votre nouvelle equipe afin de pouvoir la réutiliser dans un prochain tournois ? (O)ui ? ou (N)on?");
+			do {
+				String record = scRecord.nextLine();
+				switch (record) {
 
-			String record = scRecord.nextLine();
-			switch (record) {
-			case "O":
-				unRecord.reecritEquipe(e);
-				System.out.println("Votre equipe a bien été enregistree !");
+				case "O":
+					unRecord.reecritEquipe(e);
+					System.out.println("Votre equipe a bien été enregistree !");
 
-			case "N":
-				break;
-			default:
-				System.out
-						.println("Erreur de saisie tapez O pour OUI et N pour non");
-				break;
+				case "N":
+					break;
+				default:
+					System.out
+							.println("Erreur de saisie tapez (O) pour OUI et (N) pour non :");
+					break;
 
-			}
-			while (record.matches("O") == false && record.matches("N") == false)
-				;
+				}
+			} while (record.matches("O") == false
+					&& record.matches("N") == false);
 		}
 	}
 }

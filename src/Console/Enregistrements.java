@@ -9,31 +9,15 @@ import java.util.logging.Logger;
 
 public class Enregistrements {
 
-	// attributs
-	private List<Equipe[]> tournois = new LinkedList<Equipe[]>(); // liste
-																	// contenant
-																	// le
-																	// dernier
-																	// tournois
-																	// en cours
-																	// (liste de
-																	// tableau
-																	// de tour)
 	private String nomFichierEquipe;// nom du fichier contenant les equipes
-	private String nomFichierTournois;// nom du fichier contenant le dernier
-										// tournois en cours
-	// Iterator<Regles> itRegle; //itÃ©rateur qui pointe sur la liste des
-	// rÃ¨gles
 	private List<Equipe> equipes = new LinkedList<Equipe>();// ensemble des
 															// equipes du
 															// programme
-	private BufferedReader br;
 
 	// constructeur
-	public Enregistrements(String valNomEquipe, String valNomTournois) {
+	public Enregistrements(String valNomEquipe) {
 
 		nomFichierEquipe = valNomEquipe;
-		nomFichierTournois = valNomTournois;
 
 		try {
 			chargerListeEquipes();
@@ -45,13 +29,6 @@ public class Enregistrements {
 			Logger.getLogger(Enregistrements.class.getName()).log(Level.SEVERE,
 					null, ex);
 		}
-		/*
-		 * try { chargerTournois(); } catch (FileNotFoundException ex) {
-		 * Logger.getLogger(Enregistrements.class.getName()).log(Level.SEVERE,
-		 * null, ex); } catch (IOException ex) {
-		 * Logger.getLogger(Enregistrements.class.getName()).log(Level.SEVERE,
-		 * null, ex); }
-		 */
 
 	}
 
@@ -126,8 +103,6 @@ public class Enregistrements {
 		return tab;
 	}
 
-	// A REVOIR
-	// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	// méthode qui permet de supprimer une equipe grace a son nom
 	public void suppTeam(String nomEquipe) throws FileNotFoundException,
 			IOException {
@@ -146,16 +121,17 @@ public class Enregistrements {
 			if (ligne.contains(nomEquipe) == false) {
 				// on passe donc Ã  l'equipe suivante
 				ligne = br.readLine();
-			}
-
-			// on concatene toutes les lignes du fichier dans une chaine de
-			// caractere
-			if (fichier != null) {
-				fichier = fichier.concat("\n" + ligne);
 			} else {
-				fichier = ligne;
+
+				// on concatene toutes les lignes du fichier dans une chaine de
+				// caractere
+				if (fichier != null) {
+					fichier = fichier.concat("\n" + ligne);
+				} else {
+					fichier = ligne;
+				}
+				ligne = br.readLine();
 			}
-			ligne = br.readLine();
 		}
 		// on arrete la lecture
 		br.close();
@@ -190,98 +166,8 @@ public class Enregistrements {
 			if (e.getDescription().matches(nom) == true) {
 				return e;
 			}
-			return null;
-
 		}
 		return null;
-		
-	}
-
-	// methode qui efface le fichier tournois et en crée un nouveau vierge pour
-	// supporter la nouvelle sauvegarde
-	public void suppTournois() throws FileNotFoundException, IOException {
-		// lecture du fichier tournois
 
 	}
-
-	// méthode qui ecrit dans le fichier tournois en fonction du type de
-	// tournois l'ecriture se fait a la fin du fichier
-	public void recordTournois(Equipe[] tab) throws IOException {
-		// on ajoute des données a la fin du fichier
-		PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(
-				nomFichierTournois, true)));
-
-		// ecriture des renseignements d'une equipe par ligne
-		for (int i = 0; i < tab.length; i++) {
-			// ecriture d la ligne
-			String aEcrire = tab[i].getDescription() + ";"
-					+ tab[i].getNbJoueurs() + ";" + tab[i].getGoalAverage()
-					+ ";" + tab[i].getNbPointsMatch() + ";"
-					+ tab[i].getNbPointsTournois() + "\n";
-			// passage a la lignes suivante
-			writer.write(aEcrire);
-		}
-		// on indique que le tour est terminé
-		writer.write("tourSuivant");
-		// on arrete d'ecrire
-		writer.close();
-
-	}
-	
-	
-	//méthode qui permet d'effacer le contenu du fichier tournois
-	public void effaceTournois() throws IOException{
-		 new FileWriter(new File(nomFichierTournois)).close();
-
-	}
-
-	// méthode permettant de charger le dernier tournois en cours
-	public void chargerTournois() throws FileNotFoundException, IOException {
-		// lecture du fichier tournois
-		FileReader entree = new FileReader(nomFichierTournois);
-		br = new BufferedReader(entree);
-		// lit et retourne une ligne entiere
-		String ligne = br.readLine();
-		List<Equipe> eq = new LinkedList<Equipe>();
-		while (ligne != null) {
-
-			// lit jusqu'a un caractere en particulier (jusquÃ  la sÃ©paration
-			// condition/condition et conclusion/conclusion
-
-			// separer conditions / conclusions
-			String tab[] = ligne.split(";");
-
-			// nom d'equipe
-			String nom = tab[0];
-			// nombre de joueurs par equipe
-			String nbJoueurs = tab[1];
-			int convertJoueur = Integer.parseInt(nbJoueurs);
-			// goal average
-			String goalAverage = tab[2];
-			int convertGoal = Integer.parseInt(goalAverage);
-			// point dernier match
-			String nbPointMatch = tab[3];
-			int convertMatch = Integer.parseInt(nbPointMatch);
-			// point tournois
-			String nbPointTournois = tab[3];
-			int convertTournois = Integer.parseInt(nbPointTournois);
-			// initialiser une condition
-			Equipe team = new Equipe(nom, convertJoueur, convertGoal,
-					convertMatch, convertTournois);
-
-			// ajout de l'equipe récupérée dans la liste d'equipe
-			eq.add(team);
-			// lecture de la ligne suivante
-			ligne = br.readLine();
-
-			// si on passe au toursuivant
-			if (ligne.equals("TourSuivant") == true) {
-				// on ajoute le tableau d'un tour dans la liste du tournois
-				tournois.add(toArray(eq));
-				// on vide la liste pour en preparer une nouvelle
-				eq.clear();
-			}
-		}
-	}
-
 }

@@ -178,8 +178,7 @@ public abstract class Tournoi {
 			Equipe e = it.next();
 			if (e.getDescription().matches(nom) == true) {
 				return true;
-			} 
-			
+			} 			
 		}
 		return false;
 	}

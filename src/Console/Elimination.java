@@ -9,8 +9,6 @@ public class Elimination extends Tournoi {
 
 	// attributs
 	private List<Equipe> equipesEli = new ArrayList<Equipe>();
-	private Enregistrements unRecord = new Enregistrements("Equipes.txt",
-				"Tournois.txt");
 
 	// méthodes
 	// création d'une nouvelle equipe en fonction de ses parametre et ajout dans
@@ -98,23 +96,11 @@ public class Elimination extends Tournoi {
 		}
 		
 		
-		//enregistrement du tableau initial renseigné
-		unRecord.recordTournois(tabInitial);
-		
-		
+			
 		// affichage du gagnant du tournois final
 		if (tabSuivant.length == 1) {
 			System.out
 					.println("**********Et le grand gagnant du tournois est : ***********");
-			
-			
-			
-			
-			//le contenu du fichier d'enregistrement s'efface
-			unRecord.effaceTournois();
-			///!\ EN TRAVAUX dans enregistrement
-			
-			
 			
 		}
 		// affichage du tableau du tour d'après
@@ -126,7 +112,6 @@ public class Elimination extends Tournoi {
 	public Elimination() {
 		super();
 	}
-
 
 	public List<Equipe> getEquipesEli() {
 		return equipesEli;

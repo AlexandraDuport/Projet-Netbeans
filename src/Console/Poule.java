@@ -9,7 +9,7 @@ import java.util.List;
 public class Poule extends Tournoi {
 
 	// attributs
-
+	private Enregistrements unRecord = new Enregistrements("Equipes.txt");//fichier a remplir
 	private List<Equipe> listeEquipesPoule = new ArrayList<Equipe>(); // tableau
 																		// regroupant
 																		// toutes
@@ -47,7 +47,7 @@ public class Poule extends Tournoi {
 		if (rechercheEquipe(descriptionConstructeur) == false) {
 			Equipe team = new Equipe(descriptionConstructeur,
 					nbJoueursConstructeur);
-			listeEquipesPoule.add(team);
+			getEquipes().add(team);
 		} else {
 			System.out
 					.println("L'equipe selectionee fait deja partie du tournois");
@@ -59,6 +59,7 @@ public class Poule extends Tournoi {
 	public void startPoule() {
 		// on mélange la liste des équipes rentrées pour avoir un tirage au sort
 		// des poules aléatoires
+		listeEquipesPoule=getEquipes();
 		Collections.shuffle(listeEquipesPoule);
 
 		// toutes les 4 equipes on crée un nouveau tableau
@@ -76,7 +77,6 @@ public class Poule extends Tournoi {
 				}
 			}
 			i--;
-
 		}
 	}
 
@@ -168,5 +168,13 @@ public class Poule extends Tournoi {
 
 	public void setListePoulesTournoi(ArrayList<Equipe[]> listePouleTournoi) {
 		this.listePoulesTournoi = listePouleTournoi;
+	}
+
+	public Enregistrements getUnRecord() {
+		return unRecord;
+	}
+
+	public void setUnRecord(Enregistrements unRecord) {
+		this.unRecord = unRecord;
 	}
 }
