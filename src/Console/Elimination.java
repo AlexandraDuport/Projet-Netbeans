@@ -8,7 +8,7 @@ import java.util.List;
 public class Elimination extends Tournoi {
 
 	// attributs
-	private List<Equipe> equipesEli = new ArrayList<Equipe>();
+	private List<Equipe> equipesEli = new ArrayList<>();
 
 	// méthodes
 	// création d'une nouvelle equipe en fonction de ses parametre et ajout dans
@@ -24,7 +24,6 @@ public class Elimination extends Tournoi {
 			} else {
 				System.out
 						.println("L'equipe selectionee fait deja partie du tournois");
-				return;
 			}
 
 		}

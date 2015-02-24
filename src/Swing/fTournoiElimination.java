@@ -8,12 +8,12 @@ package Swing;
 import Console.Elimination;
 import static Console.Elimination.tabSize;
 import Console.Equipe;
+import static Swing.fPoule.AjoutColonne;
 import java.awt.Color;
-import java.awt.Component;
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableCellRenderer;
+import java.util.InputMismatchException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumn;
 
 /**
  *
@@ -23,6 +23,9 @@ public class fTournoiElimination extends javax.swing.JDialog {
 
     private final Elimination elimination;
     private final DefaultTableModel table;
+    Equipe[] tabInitial;
+    int indiceCol = 0;
+    int indiceRow = 0;
     private Color couleur;
 
     /**
@@ -36,8 +39,7 @@ public class fTournoiElimination extends javax.swing.JDialog {
         initComponents();
 
         tpAffichageGagnant.setVisible(false); // on n'affiche pas encore le TextPane qui va dire le gagnant du tournoi
-        
-        
+
         elimination = ((fAccueil) getParent()).getElimination();
 
         table = (DefaultTableModel) tElimination.getModel();
@@ -46,7 +48,10 @@ public class fTournoiElimination extends javax.swing.JDialog {
             tElimination.getCellRenderer(i * 2, 0).getTableCellRendererComponent(tElimination, elimination.getEquipesEli().get(i).getDescription(), true, true, i, 0).setBackground(couleur);
             //tElimination.getCellRenderer(i, 1).getTableCellRendererComponent(tElimination, "", true, true, i, 1).setBackground(couleur);
 
+            //on ajoute les equipes de la listes au tournois
             table.addRow(new Object[]{elimination.getEquipesEli().get(i).getDescription()});
+            
+            
 
 //            if (i % 2 == 0) {
 //                if (couleur == Color.RED) {
@@ -56,6 +61,8 @@ public class fTournoiElimination extends javax.swing.JDialog {
 //                }
 //            }
         }
+        //on commence le tournois pour avoir le tableau initial d'équipes
+        tabInitial = elimination.startTournois();
     }
 
     /**
@@ -107,7 +114,6 @@ public class fTournoiElimination extends javax.swing.JDialog {
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel1.setText("Saisie des scores");
 
-        bValider.setIcon(new javax.swing.ImageIcon("D:\\Photos\\42.gif")); // NOI18N
         bValider.setText("Valider les scores et passer au tour suivant");
         bValider.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -130,9 +136,8 @@ public class fTournoiElimination extends javax.swing.JDialog {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(25, 25, 25)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 218, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(71, 71, 71)
-                        .addComponent(jScrollPane2)
-                        .addGap(79, 79, 79))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(bValider)
@@ -145,18 +150,15 @@ public class fTournoiElimination extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 77, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 77, Short.MAX_VALUE)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 353, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(108, 108, 108)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(bExit)
-                    .addComponent(bValider, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(bExit)
+                            .addComponent(bValider, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
@@ -168,61 +170,116 @@ public class fTournoiElimination extends javax.swing.JDialog {
     }//GEN-LAST:event_bExitActionPerformed
 
     private void bValiderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bValiderActionPerformed
-        //transfo de la liste en tableau
-        Equipe tabInitial[] = elimination.getEquipesEli().toArray(new Equipe[elimination.getEquipesEli().size()]);
-        //a cet endroit on a un tableau fixe d'équipes
-
-        //appliquer lancerTour(Equipe[])
-        //**********************************************RECUP ET /ADAPTATION\ DE L'ALGO QUI EST DANS Elimination
+        //notification que la table a changé
+        table.fireTableDataChanged();
         while (tabInitial.length > 1) {
-            int i = 0;// incrémenteur tableau initial
-            int j = 0;// incrémenteur tableau du tour suivant
-            Equipe tabSuivant[] = new Equipe[tabSize(tabInitial)];// tableau du tour
-
-            // suivant
-            TableColumn col = new TableColumn();
-            col.setHeaderValue("Nouveau Tour");
-            table.addColumn(col);
+            try {
+                //score récupérés et mis dans le tableau
+                while (indiceRow < tabInitial.length) {
+                    pasEgalite(tabInitial[indiceRow], tabInitial[indiceRow + 1]);
+                    indiceRow = indiceRow + 2;
+                }
+                //réinitialisation de l'indice des lignes pour le tour suivant
+                indiceRow = 0;
+                //tab Initial est maintenant rempli passage au tour suivant en écrasant le tableau initial par le tableau d'après
+                tabInitial = lancerTour(elimination,tabInitial);
+            } catch (Exception ex) {
+                Logger.getLogger(fTournoiElimination.class.getName()).log(Level.SEVERE, null, ex);
+            }
             
-            int compteurTour =2; // pour savoir a quelle colonne on va rajouter le getDescription de l'équipe gagnante
-            
-            // cas d'un tableau impair
-            if ((tabInitial.length) % 2 != 0) {
-			// On cherche le champion avec le meilleur goal average et on le
-                // place automatiquement dans la première case du tableau suivant
-                tabSuivant[0] = elimination.best(tabInitial);
-                j = 1; // incrémenteur du tableau suivant passe à 1
-                
-                table.setValueAt(tabSuivant[0].getDescription(), 0, compteurTour); // on met en première position l'es qui a le meilleur goalAverage
-            }
+             //ajout de nouvelles colonnes dans le tableau avec entrée des équipes du nouveau tour (maintenant dans le nouveau tableau initial)
+        table.addColumn("Nouveau Tour !");
+        table.addColumn("Score :");
+     //   AjoutColonne(table, "Nouveau Tour! ");
+      //  AjoutColonne(table, "Scores :");
+       // table.fireTableStructureChanged();
+        indiceCol = indiceCol + 2;
 
-            while (i < (tabInitial.length) && (j < (tabSuivant.length))) {
-
-                // affectation des points de tournois et de match
-                elimination.pasEgalite(tabInitial[i], tabInitial[i + 1]);
-                tabSuivant[j] = elimination.teamGagnante(tabInitial[i], tabInitial[i + 1]);
-                // passage au prochain match du meme tour
-                i = i + 2;
-                // passage a la prochaine case du tableau du tour suivant
-                j++;
-                table.setValueAt(tabSuivant[j].getDescription(), 0, compteurTour);
-                compteurTour++;
-
-            }
-
-		//enregistrement du tableau initial renseigné
-            //unRecord.recordTournois(tabInitial);
-            // affichage du gagnant du tournois final
-            if (tabSuivant.length == 1) {
-                tpAffichageGagnant.setText("Le gagnant du tournoi est " + tabSuivant[0].getDescription());
-
-			//le contenu du fichier d'enregistrement s'efface
-                //unRecord.effaceTournois();
-                ///!\ EN TRAVAUX dans enregistrement	
-            }
+        for (int i = 0; i < tabInitial.length; i++) {
+           
+            table.setValueAt(tabInitial[i].getDescription(), indiceRow, indiceCol); //
+            indiceRow++;
         }
-        //**********************************************
+        table.fireTableStructureChanged();
+        indiceRow = 0;
+            
+            
+            
+        }
+
+       
     }//GEN-LAST:event_bValiderActionPerformed
+public Equipe[] lancerTour(Elimination eli, Equipe[] tabInitial) throws Exception {
+		int i = 0;// incrémenteur tableau initial
+		int j = 0;// incrémenteur tableau du tour suivant
+		Equipe tabSuivant[] = new Equipe[tabSize(tabInitial)];// tableau du tour
+
+		// suivant
+		// cas d'un tableau impair
+		if ((tabInitial.length) % 2 != 0) {
+			// On cherche le champion avec le meilleur goal average et on le
+			// place automatiquement dans la première case du tableau suivant
+			tabSuivant[0] = eli.best(tabInitial);
+			j = 1; // incrémenteur du tableau suivant passe à 1
+		}
+	
+		while (i < (tabInitial.length) && (j < (tabSuivant.length))) {
+			tabSuivant[j] = eli.teamGagnante(tabInitial[i], tabInitial[i + 1]);
+			// passage au prochain match du meme tour
+			i = i + 2;
+			// passage a la prochaine case du tableau du tour suivant
+			j++;
+		}
+
+		// On retourne le nouveau tableau de tour
+		return tabSuivant;
+	}
+    
+    public void pasEgalite(Equipe eq1, Equipe eq2) {
+        do {
+            try {
+                saisieScores(eq1, eq2);
+                if (eq1.getNbPointsMatch() == eq2.getNbPointsMatch()) {
+                    throw new Exception();
+                }
+
+            } catch (Exception egalite) {
+                //PETITE FENETRE ATTENTION
+            }
+        } while (eq1.getNbPointsMatch() == eq2.getNbPointsMatch());
+    }
+
+    public void saisieScores(Equipe eq1, Equipe eq2) {
+        // indicateur qui laisse passer à la saisie suivante que si la
+        // derniere est conforme
+        boolean indicateur = false;
+        do {
+            int score = 0;// score du match
+
+            try {
+                // pas d'autorisation de score négatif
+                if (score < 0) {
+                    throw new Exception();
+                }
+                // affectation des points en récupérant le contenu des cases
+                score = Integer.parseInt((String) table.getValueAt(indiceRow, indiceCol + 1));
+                eq1.setNbPointsMatch(score);
+                score = Integer.parseInt((String) table.getValueAt(indiceRow + 1, indiceCol + 1));
+                eq2.setNbPointsMatch(score);
+
+                indicateur = true;
+                // levée de l'exception d'un score négatif
+
+            } catch (InputMismatchException pbFormat) {
+                //PETITE FENETRE ATTENTION
+                indicateur = false;
+            } catch (Exception nbPositif) {
+                //PETITE FENETRE ATTENTION
+                indicateur = false;
+            }
+
+        } while (indicateur == false);
+    }
 
     /**
      * @param args the command line arguments
@@ -254,6 +311,7 @@ public class fTournoiElimination extends javax.swing.JDialog {
 
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 fTournoiElimination dialog = new fTournoiElimination(new javax.swing.JFrame(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
