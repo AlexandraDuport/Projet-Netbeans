@@ -89,6 +89,7 @@
               </Table>
             </Property>
             <Property name="autoResizeMode" type="int" value="4"/>
+            <Property name="cellSelectionEnabled" type="boolean" value="true"/>
           </Properties>
         </Component>
       </SubComponents>

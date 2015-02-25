@@ -28,6 +28,7 @@ public class fTournoiElimination extends javax.swing.JDialog {
     Equipe[] tabInitial;
     int indiceCol = 0;
     int indiceRow = 0;
+    int comptCol = 0;
     private Color couleur;
 
     /**
@@ -104,6 +105,7 @@ public class fTournoiElimination extends javax.swing.JDialog {
             }
         });
         tElimination.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
+        tElimination.setCellSelectionEnabled(true);
         jScrollPane1.setViewportView(tElimination);
 
         bExit.setText("Exit");
@@ -203,11 +205,21 @@ public class fTournoiElimination extends javax.swing.JDialog {
             TableColumn colNvxTour = new TableColumn();
             colNvxTour.setHeaderValue("Nouveau Tour !");
             table.addColumn(colNvxTour);
-            
+        
+           
             TableColumn colNvxScore = new TableColumn();
             colNvxScore.setHeaderValue("Scores: ");
+            
+            comptCol=comptCol+2;
+            table.addColumn(colNvxScore );
+            tElimination.setColumnSelectionAllowed(true);
+            tElimination.setEditingColumn(comptCol);
+            table.fireTableStructureChanged();
+            
+           
           
-            table.addColumn(colNvxScore);
+            
+            
             
             indiceCol = indiceCol + 2;
 
@@ -223,6 +235,8 @@ public class fTournoiElimination extends javax.swing.JDialog {
 
 
     }//GEN-LAST:event_bValiderActionPerformed
+
+    
     public Equipe[] lancerTour(Elimination eli, Equipe[] tabInitial) throws Exception {
         int i = 0;// incrémenteur tableau initial
         int j = 0;// incrémenteur tableau du tour suivant
