@@ -175,21 +175,24 @@ public class fTournoiElimination extends javax.swing.JDialog {
         table.fireTableDataChanged();
         while (tabInitial.length > 1) {
             try {
-                //score récupérés et mis dans le tableau
+                //score récupérés et mis dans le tableau on arrete le proessus si il y a un problème au niveau des score
                 while (indiceRow < tabInitial.length) {
-                     pasEgalite(tabInitial[indiceRow], tabInitial[indiceRow + 1]);
-                     indiceRow = indiceRow + 2;
-                }
-                if (pasEgalite(tabInitial[indiceRow], tabInitial[indiceRow + 1]) == false) {
+                      if (pasEgalite(tabInitial[indiceRow], tabInitial[indiceRow + 1]) == false) {
                     indiceRow=0;
                     break;
                 }
+                      else indiceRow = indiceRow + 2;
+                                     
+                     
+                }
+               if (indiceRow==0){break;}
                 //réinitialisation de l'indice des lignes pour le tour suivant
                 indiceRow = 0;
                 //tab Initial est maintenant rempli passage au tour suivant en écrasant le tableau initial par le tableau d'après
                 tabInitial = lancerTour(elimination, tabInitial);
             } catch (Exception ex) {
                 Logger.getLogger(fTournoiElimination.class.getName()).log(Level.SEVERE, null, ex);
+            
             }
 
             //ajout de nouvelles colonnes dans le tableau avec entrée des équipes du nouveau tour (maintenant dans le nouveau tableau initial)
