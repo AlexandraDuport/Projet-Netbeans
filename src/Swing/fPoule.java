@@ -56,6 +56,7 @@ public class fPoule extends javax.swing.JDialog {
         bExit = new javax.swing.JButton();
         bPrecedent = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
+        bCommencer = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -98,6 +99,13 @@ public class fPoule extends javax.swing.JDialog {
 
         jLabel2.setText("Liste des poules du tournoi:");
 
+        bCommencer.setText("Commencer !");
+        bCommencer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bCommencerActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -105,16 +113,18 @@ public class fPoule extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(bPrecedent, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 163, Short.MAX_VALUE)
-                        .addComponent(bRetourAccueil)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(bExit))
-                    .addGroup(layout.createSequentialGroup()
                         .addGap(168, 168, 168)
                         .addComponent(jLabel1)
-                        .addGap(0, 171, Short.MAX_VALUE)))
+                        .addGap(0, 171, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(bPrecedent, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(32, 32, 32)
+                        .addComponent(bCommencer)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(bRetourAccueil)
+                        .addGap(18, 18, 18)
+                        .addComponent(bExit)))
                 .addContainerGap())
             .addGroup(layout.createSequentialGroup()
                 .addGap(30, 30, 30)
@@ -136,7 +146,8 @@ public class fPoule extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(bExit)
                     .addComponent(bRetourAccueil)
-                    .addComponent(bPrecedent))
+                    .addComponent(bPrecedent)
+                    .addComponent(bCommencer))
                 .addContainerGap())
         );
 
@@ -165,6 +176,10 @@ public class fPoule extends javax.swing.JDialog {
     private void bPrecedentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bPrecedentActionPerformed
         //recapEquipesPoule.setVisible(true);
     }//GEN-LAST:event_bPrecedentActionPerformed
+
+    private void bCommencerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bCommencerActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_bCommencerActionPerformed
 
     /**
      * @param args the command line arguments
@@ -204,6 +219,7 @@ public class fPoule extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton bCommencer;
     private javax.swing.JButton bExit;
     private javax.swing.JButton bPrecedent;
     private javax.swing.JButton bRetourAccueil;
