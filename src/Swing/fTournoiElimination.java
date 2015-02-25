@@ -251,13 +251,7 @@ public class fTournoiElimination extends javax.swing.JDialog {
 
 
             } catch (Exception egalite) {   
-                int choix = JOptionPane.showConfirmDialog(this, "Pb egalité",
-                "ATTENTION", JOptionPane.OK_OPTION, JOptionPane.WARNING_MESSAGE);
-
-        if (choix == JOptionPane.OK_OPTION) {
-            this.setVisible(false);
-            dispose();
-        } else;
+                JOptionPane.showMessageDialog(null, "Attention, pas d'égalité possible pour le mode élimination directe",  "ATTENTION", JOptionPane.ERROR_MESSAGE);
                 return false;
             }
             return true;
