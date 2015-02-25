@@ -49,7 +49,7 @@ public class fElimination extends javax.swing.JDialog {
         jScrollPane1 = new javax.swing.JScrollPane();
         tElimination = new javax.swing.JTable();
         jLabel2 = new javax.swing.JLabel();
-        bStart = new javax.swing.JButton();
+        bCommencer = new javax.swing.JButton();
 
         bPrecedent.setText(" < Précédent");
         bPrecedent.addActionListener(new java.awt.event.ActionListener() {
@@ -118,10 +118,10 @@ public class fElimination extends javax.swing.JDialog {
 
         jLabel2.setText("Liste des équipes du tournoi:");
 
-        bStart.setText("Commencer !");
-        bStart.addActionListener(new java.awt.event.ActionListener() {
+        bCommencer.setText("Commencer !");
+        bCommencer.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bStartActionPerformed(evt);
+                bCommencerActionPerformed(evt);
             }
         });
 
@@ -145,15 +145,16 @@ public class fElimination extends javax.swing.JDialog {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(61, 61, 61))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(bPrecedent1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(bCommencer)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(bStart)))
-                        .addGap(47, 47, 47)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(bRetourAccueil, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(bExit1, javax.swing.GroupLayout.Alignment.TRAILING))))
+                                .addComponent(bRetourAccueil)
+                                .addGap(0, 0, Short.MAX_VALUE)))
+                        .addComponent(bExit1)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -164,17 +165,13 @@ public class fElimination extends javax.swing.JDialog {
                 .addGap(18, 18, 18)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(bRetourAccueil)
-                        .addGap(73, 73, 73)))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(bExit1)
                     .addComponent(bPrecedent1)
-                    .addComponent(bStart))
+                    .addComponent(bCommencer)
+                    .addComponent(bRetourAccueil))
                 .addContainerGap())
         );
 
@@ -228,11 +225,11 @@ public class fElimination extends javax.swing.JDialog {
         setVisible(false);
     }//GEN-LAST:event_bPrecedent1ActionPerformed
 
-    private void bStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bStartActionPerformed
+    private void bCommencerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bCommencerActionPerformed
         saisieMatchElimination = new fTournoiElimination(((fAccueil)getParent()), false);
         //this.setVisible(false);
         saisieMatchElimination.setVisible(true);
-    }//GEN-LAST:event_bStartActionPerformed
+    }//GEN-LAST:event_bCommencerActionPerformed
 
     /**
      * @param args the command line arguments
@@ -272,13 +269,13 @@ public class fElimination extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton bCommencer;
     private javax.swing.JButton bExit;
     private javax.swing.JButton bExit1;
     private javax.swing.JButton bPrecedent;
     private javax.swing.JButton bPrecedent1;
     private javax.swing.JButton bRetour;
     private javax.swing.JButton bRetourAccueil;
-    private javax.swing.JButton bStart;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
