@@ -17,6 +17,7 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
+
 /**
  *
  * @author Sammy Guergachi <sguergachi at gmail.com>
@@ -95,15 +96,7 @@ public class fTournoiElimination extends javax.swing.JDialog {
             new String [] {
                 "Nouveau  Tour !", "Scores :"
             }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, true
-            };
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
+        ));
         tElimination.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
         tElimination.setCellSelectionEnabled(true);
         jScrollPane1.setViewportView(tElimination);
@@ -210,11 +203,15 @@ public class fTournoiElimination extends javax.swing.JDialog {
             TableColumn colNvxScore = new TableColumn();
             colNvxScore.setHeaderValue("Scores: ");
             
-            comptCol=comptCol+2;
+            
+            
+            
+            
+//            comptCol=comptCol+2;
             table.addColumn(colNvxScore );
-            tElimination.setColumnSelectionAllowed(true);
-            tElimination.setEditingColumn(comptCol);
-            table.fireTableStructureChanged();
+//            tElimination.setColumnSelectionAllowed(true);
+//            tElimination.setEditingColumn(comptCol);
+//            table.fireTableStructureChanged();
             
            
           
@@ -222,6 +219,10 @@ public class fTournoiElimination extends javax.swing.JDialog {
             
             
             indiceCol = indiceCol + 2;
+            
+//            for (int i=0; i< tabInitial.length ; i++){
+//                setCellEditable(i, indiceCol, true);
+//            }
 
             for (int i = 0; i < tabInitial.length; i++) {
 
@@ -236,6 +237,7 @@ public class fTournoiElimination extends javax.swing.JDialog {
 
     }//GEN-LAST:event_bValiderActionPerformed
 
+    
     
     public Equipe[] lancerTour(Elimination eli, Equipe[] tabInitial) throws Exception {
         int i = 0;// incrémenteur tableau initial
@@ -316,6 +318,10 @@ public class fTournoiElimination extends javax.swing.JDialog {
 
     }
 
+//    private boolean[][] editable_cells;
+//    public void setCellEditable(int row, int col, boolean value) {
+//        this.editable_cells[row][col] = value; // set cell true/false
+//    }
     /**
      * @param args the command line arguments
      */
