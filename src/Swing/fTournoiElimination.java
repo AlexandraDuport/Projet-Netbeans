@@ -215,6 +215,9 @@ public class fTournoiElimination extends javax.swing.JDialog {
             indiceRow = 0;
 
         }
+        
+        tpAffichageGagnant.setVisible(true);
+        tpAffichageGagnant.setText("LE GAGNANT DU TOURNOI EST " + tabInitial[0].getDescription());
 
 
     }//GEN-LAST:event_bValiderActionPerformed
@@ -285,6 +288,7 @@ public class fTournoiElimination extends javax.swing.JDialog {
 
             } catch (InputMismatchException pbFormat) {
                 JOptionPane.showMessageDialog(null,  "Attention, rentrez un nombre entier", "ATTENTION" , JOptionPane.ERROR_MESSAGE);
+                
                
 //                indicateur = false;
                 
