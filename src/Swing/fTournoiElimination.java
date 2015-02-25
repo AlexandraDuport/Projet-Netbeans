@@ -8,7 +8,6 @@ package Swing;
 import Console.Elimination;
 import static Console.Elimination.tabSize;
 import Console.Equipe;
-import static Swing.fPoule.AjoutColonne;
 import java.awt.Color;
 import java.util.InputMismatchException;
 import java.util.logging.Level;
@@ -16,7 +15,6 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
-
 
 /**
  *
@@ -29,7 +27,6 @@ public class fTournoiElimination extends javax.swing.JDialog {
     Equipe[] tabInitial;
     int indiceCol = 0;
     int indiceRow = 0;
-    int comptCol = 0;
     private Color couleur;
 
     /**
@@ -46,7 +43,7 @@ public class fTournoiElimination extends javax.swing.JDialog {
 
         elimination = ((fAccueil) getParent()).getElimination();
         //tabInitial initialisé
-        tabInitial=(Equipe[]) elimination.getEquipesEli().toArray();
+        tabInitial = (Equipe[]) elimination.getEquipesEli().toArray();
         table = (DefaultTableModel) tElimination.getModel();
         couleur = Color.RED;
         for (int i = 0; i < elimination.getEquipesEli().size(); i++) {
@@ -54,8 +51,6 @@ public class fTournoiElimination extends javax.swing.JDialog {
             //tElimination.getCellRenderer(i, 1).getTableCellRendererComponent(tElimination, "", true, true, i, 1).setBackground(couleur);
 
             //on ajoute les equipes de la listes au tournois//on commence le tournois pour avoir le tableau initial d'équipes
-        
-        
             table.addRow(new Object[]{elimination.getEquipesEli().get(i).getDescription()});
 
 //            if (i % 2 == 0) {
@@ -66,7 +61,7 @@ public class fTournoiElimination extends javax.swing.JDialog {
 //                }
 //            }
         }
-        
+
     }
 
     /**
@@ -88,7 +83,6 @@ public class fTournoiElimination extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        tElimination.setBackground(new java.awt.Color(0, 255, 255));
         tElimination.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -168,90 +162,96 @@ public class fTournoiElimination extends javax.swing.JDialog {
 
     private void bValiderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bValiderActionPerformed
         //notification que la table a changé
-        table.fireTableDataChanged();
-        
-        
-            try {
-                //score récupérés et mis dans le tableau on arrete le proessus si il y a un problème au niveau des score
-                while (indiceRow < tabInitial.length) {
-                      if (pasEgalite(tabInitial[indiceRow], tabInitial[indiceRow + 1]) == false) {
-                    indiceRow=0;
-                    break;
-                }
-                      else indiceRow = indiceRow + 2;
-                                     
-                     
-                }
-              if (indiceRow==0){
-                  return;
-              }
-                //réinitialisation de l'indice des lignes pour le tour suivant
-                indiceRow = 0;
-                //tab Initial est maintenant rempli passage au tour suivant en écrasant le tableau initial par le tableau d'après
-                tabInitial = lancerTour(elimination, tabInitial);
-            } catch (Exception ex) {
-                Logger.getLogger(fTournoiElimination.class.getName()).log(Level.SEVERE, null, ex);
-            
-            }
 
-            //ajout de nouvelles colonnes dans le tableau avec entrée des équipes du nouveau tour (maintenant dans le nouveau tableau initial)
-            TableColumn colNvxTour = new TableColumn();
-            colNvxTour.setHeaderValue("Nouveau Tour !");
-            table.addColumn(colNvxTour);
-        
-           
+        table.fireTableDataChanged();
+
+        try {
+            Equipe aGarder = null;//score récupérés et mis dans le tableau on arrete le proessus si il y a un problème au niveau des score
+           if (tabInitial.length%2!=0){
+              aGarder= elimination.best(tabInitial);
+                    indiceRow++;
+                }
+           while (indiceRow < tabInitial.length) {
+                
+                if (pasEgalite(tabInitial[indiceRow], tabInitial[indiceRow + 1]) == false) {
+                    indiceRow = 0;
+                    break;
+                } else {
+                    indiceRow = indiceRow + 2;
+                }
+            }
+            if (indiceRow == 0) {
+                return;
+            }
+            //réinitialisation de l'indice des lignes pour le tour suivant
+            indiceRow = 0;
+            
+            //tab Initial est maintenant rempli passage au tour suivant en écrasant le tableau initial par le tableau d'après
+            tabInitial = lancerTour(elimination, tabInitial);
+            //MODIF QUI CHIE ENCORE****************************************************************       
+            if (aGarder !=null){
+           tabInitial[tabInitial.length-1]=aGarder;
+             
+        }
+        } catch (Exception ex) {
+            Logger.getLogger(fTournoiElimination.class.getName()).log(Level.SEVERE, null, ex);
+
+        }
+
+        //ajout de nouvelles colonnes dans le tableau avec entrée des équipes du nouveau tour (maintenant dans le nouveau tableau initial)
+        TableColumn colNvxTour = new TableColumn();
+        colNvxTour.setHeaderValue("Nouveau Tour !");
+        table.addColumn(colNvxTour);
+
+        if (tabInitial.length != 1) {
             TableColumn colNvxScore = new TableColumn();
             colNvxScore.setHeaderValue("Scores: ");
-            
-            
-            
-            
-            
-//            comptCol=comptCol+2;
-            table.addColumn(colNvxScore );
-//            tElimination.setColumnSelectionAllowed(true);
-//            tElimination.setEditingColumn(comptCol);
-//            table.fireTableStructureChanged();
-            
-           
-          
-            
-            
-            
-            indiceCol = indiceCol + 2;
-            
-//            for (int i=0; i< tabInitial.length ; i++){
-//                setCellEditable(i, indiceCol, true);
-//            }
+            table.addColumn(colNvxScore);
+        } else {
+            //on empêche l'utilisateur de passer au tour suivant
+            bValider.setVisible(false);
+            //On affiche le nom du gagnant dans le panel
+            tpAffichageGagnant.setText("Le grand gagnant du tournois est" + tabInitial[0].getDescription());
+        }
 
-            for (int i = 0; i < tabInitial.length; i++) {
-
+        indiceCol = indiceCol + 2;
+//ecriture du tableau avec traitement des impairs
+        for (int i = 0; i < tabInitial.length; i++) {
+            //on ecrit tout normallement si le tableau est pair
+            if (tabInitial.length % 2 == 0) {
                 table.setValueAt(tabInitial[i].getDescription(), indiceRow, indiceCol); //
                 indiceRow++;
+                //sinon on ecrit pas la meilleure des equipes que l'on réserve pour le tour suivant
+            } else {
+                Equipe e = elimination.best(tabInitial);
+                if (e.getDescription().matches(tabInitial[i].getDescription()) == false) {
+                    table.setValueAt(tabInitial[i].getDescription(), indiceRow, indiceCol); //
+                    indiceRow++;
+                }
+
             }
-            table.fireTableStructureChanged();
-            indiceRow = 0;
+        }
+        table.fireTableStructureChanged();
+        indiceRow = 0;
 
-        
-
+        //lorsqu'on a trouvé le gagnant
 
     }//GEN-LAST:event_bValiderActionPerformed
 
-    
-    
     public Equipe[] lancerTour(Elimination eli, Equipe[] tabInitial) throws Exception {
         int i = 0;// incrémenteur tableau initial
         int j = 0;// incrémenteur tableau du tour suivant
         Equipe tabSuivant[] = new Equipe[tabSize(tabInitial)];// tableau du tour
 
-		// suivant
+        // suivant
         // cas d'un tableau impair
         if ((tabInitial.length) % 2 != 0) {
-			// On cherche le champion avec le meilleur goal average et on le
+            // On cherche le champion avec le meilleur goal average et on le
             // place automatiquement dans la première case du tableau suivant
             tabSuivant[0] = eli.best(tabInitial);
             j = 1; // incrémenteur du tableau suivant passe à 1
         }
+        
 
         while (i < (tabInitial.length) && (j < (tabSuivant.length))) {
             tabSuivant[j] = eli.teamGagnante(tabInitial[i], tabInitial[i + 1]);
@@ -267,19 +267,17 @@ public class fTournoiElimination extends javax.swing.JDialog {
 
     public boolean pasEgalite(Equipe eq1, Equipe eq2) {
 
-            try {
-                saisieScores(eq1, eq2);
-                if (eq1.getNbPointsMatch() == eq2.getNbPointsMatch()) {
-                    throw new Exception();
-                                   }
-                
-
-
-            } catch (Exception egalite) {   
-                JOptionPane.showMessageDialog(null, "Attention, pas d'égalité possible pour le mode élimination directe",  "ATTENTION", JOptionPane.ERROR_MESSAGE);
-                return false;
+        try {
+            saisieScores(eq1, eq2);
+            if (eq1.getNbPointsMatch() == eq2.getNbPointsMatch()) {
+                throw new Exception();
             }
-            return true;
+
+        } catch (Exception egalite) {
+            JOptionPane.showMessageDialog(null, "Attention, pas d'égalité possible pour le mode élimination directe", "ATTENTION", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        return true;
     }
 
     public void saisieScores(Equipe eq1, Equipe eq2) {
@@ -287,34 +285,30 @@ public class fTournoiElimination extends javax.swing.JDialog {
         // derniere est conforme
 //        boolean indicateur = false;
 
-            int score = 0;// score du match
+        int score = 0;// score du match
 
-            try {
-                // pas d'autorisation de score négatif
-                if (score < 0) {
-                    throw new Exception();
-                }
-                // affectation des points en récupérant le contenu des cases
-                score = Integer.parseInt((String) table.getValueAt(indiceRow, indiceCol + 1));
-                eq1.setNbPointsMatch(score);
-                score = Integer.parseInt((String) table.getValueAt(indiceRow + 1, indiceCol + 1));
-                eq2.setNbPointsMatch(score);
-                
+        try {
+            // pas d'autorisation de score négatif
+            if (score < 0) {
+                throw new Exception();
+            }
+            // affectation des points en récupérant le contenu des cases
+            score = Integer.parseInt((String) table.getValueAt(indiceRow, indiceCol + 1));
+            eq1.setNbPointsMatch(score);
+            score = Integer.parseInt((String) table.getValueAt(indiceRow + 1, indiceCol + 1));
+            eq2.setNbPointsMatch(score);
 
 //                indicateur = true;
-                // levée de l'exception d'un score négatif
+            // levée de l'exception d'un score négatif
+        } catch (InputMismatchException pbFormat) {
+            JOptionPane.showMessageDialog(null, "Attention, rentrez un nombre entier", "ATTENTION", JOptionPane.ERROR_MESSAGE);
 
-            } catch (InputMismatchException pbFormat) {
-                JOptionPane.showMessageDialog(null,  "Attention, rentrez un nombre entier", "ATTENTION" , JOptionPane.ERROR_MESSAGE);
-               
 //                indicateur = false;
-                
-            } catch (Exception nbPositif) {
-                JOptionPane.showMessageDialog(null, "Attention, un score de match ne peut pas être négatif", "ATTENTION", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception nbPositif) {
+            JOptionPane.showMessageDialog(null, "Attention, un score de match ne peut pas être négatif", "ATTENTION", JOptionPane.ERROR_MESSAGE);
 //                indicateur = false;
-               
-            }
-            
+
+        }
 
     }
 
