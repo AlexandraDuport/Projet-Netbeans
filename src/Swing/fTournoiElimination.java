@@ -177,8 +177,12 @@ public class fTournoiElimination extends javax.swing.JDialog {
             try {
                 //score récupérés et mis dans le tableau
                 while (indiceRow < tabInitial.length) {
-                     if (pasEgalite(tabInitial[indiceRow], tabInitial[indiceRow + 1]) == false) {break;}
-                     else indiceRow = indiceRow + 2;
+                     pasEgalite(tabInitial[indiceRow], tabInitial[indiceRow + 1]);
+                     indiceRow = indiceRow + 2;
+                }
+                if (pasEgalite(tabInitial[indiceRow], tabInitial[indiceRow + 1]) == false) {
+                    indiceRow=0;
+                    break;
                 }
                 //réinitialisation de l'indice des lignes pour le tour suivant
                 indiceRow = 0;
@@ -197,9 +201,6 @@ public class fTournoiElimination extends javax.swing.JDialog {
             colNvxScore.setHeaderValue("Scores: ");
             table.addColumn(colNvxScore);
             
-            //   AjoutColonne(table, "Nouveau Tour! ");
-            //  AjoutColonne(table, "Scores :");
-            // table.fireTableStructureChanged();
             indiceCol = indiceCol + 2;
 
             for (int i = 0; i < tabInitial.length; i++) {
