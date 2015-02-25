@@ -218,6 +218,7 @@ public class fTournoiElimination extends javax.swing.JDialog {
             indiceRow = 0;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
         
 =======
         }
@@ -225,6 +226,9 @@ public class fTournoiElimination extends javax.swing.JDialog {
         tpAffichageGagnant.setVisible(true);
         tpAffichageGagnant.setText("LE GAGNANT DU TOURNOI EST " + tabInitial[0].getDescription());
 >>>>>>> Merge remote-tracking branch 'origin/master'
+=======
+        
+>>>>>>> dd83eaee4a52b2ef70ed6f6aee9dc0eb7312abee
 
 
     }//GEN-LAST:event_bValiderActionPerformed
