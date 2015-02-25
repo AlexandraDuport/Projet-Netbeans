@@ -9,6 +9,7 @@ import Console.Elimination;
 import Console.Equipe;
 import java.awt.Color;
 import java.awt.Frame;
+import java.util.Arrays;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -341,8 +342,9 @@ public class fEquipeElimination extends javax.swing.JDialog {
             eq = new Equipe(table.getValueAt(j, 0).toString(), Integer.parseInt(table.getValueAt(j, 1).toString()));
             tournoiElimination.getEquipesEli().add(eq);
         }
-
-        tournoiElimination.startTournois();
+Equipe[] tabInter= tournoiElimination.startTournois();
+tournoiElimination.setEquipesEli(Arrays.asList(tabInter));
+        
         ((fAccueil) getParent()).setElimination(tournoiElimination);
         recapEquipesElimination = new fElimination((fAccueil) this.getParent(), false);
         this.setVisible(false);
