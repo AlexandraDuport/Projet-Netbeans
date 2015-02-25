@@ -173,7 +173,8 @@ public class fTournoiElimination extends javax.swing.JDialog {
     private void bValiderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bValiderActionPerformed
         //notification que la table a changé
         table.fireTableDataChanged();
-        while (tabInitial.length > 1) {
+        
+        
             try {
                 //score récupérés et mis dans le tableau on arrete le proessus si il y a un problème au niveau des score
                 while (indiceRow < tabInitial.length) {
@@ -185,7 +186,9 @@ public class fTournoiElimination extends javax.swing.JDialog {
                                      
                      
                 }
-               if (indiceRow==0){break;}
+              if (indiceRow==0){
+                  return;
+              }
                 //réinitialisation de l'indice des lignes pour le tour suivant
                 indiceRow = 0;
                 //tab Initial est maintenant rempli passage au tour suivant en écrasant le tableau initial par le tableau d'après
@@ -214,10 +217,14 @@ public class fTournoiElimination extends javax.swing.JDialog {
             table.fireTableStructureChanged();
             indiceRow = 0;
 
+<<<<<<< HEAD
+        
+=======
         }
         
         tpAffichageGagnant.setVisible(true);
         tpAffichageGagnant.setText("LE GAGNANT DU TOURNOI EST " + tabInitial[0].getDescription());
+>>>>>>> Merge remote-tracking branch 'origin/master'
 
 
     }//GEN-LAST:event_bValiderActionPerformed
