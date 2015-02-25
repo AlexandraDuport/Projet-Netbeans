@@ -43,14 +43,17 @@ public class fTournoiElimination extends javax.swing.JDialog {
         tpAffichageGagnant.setVisible(false); // on n'affiche pas encore le TextPane qui va dire le gagnant du tournoi
 
         elimination = ((fAccueil) getParent()).getElimination();
-
+        //tabInitial initialisé
+        tabInitial=(Equipe[]) elimination.getEquipesEli().toArray();
         table = (DefaultTableModel) tElimination.getModel();
         couleur = Color.RED;
         for (int i = 0; i < elimination.getEquipesEli().size(); i++) {
             tElimination.getCellRenderer(i * 2, 0).getTableCellRendererComponent(tElimination, elimination.getEquipesEli().get(i).getDescription(), true, true, i, 0).setBackground(couleur);
             //tElimination.getCellRenderer(i, 1).getTableCellRendererComponent(tElimination, "", true, true, i, 1).setBackground(couleur);
 
-            //on ajoute les equipes de la listes au tournois
+            //on ajoute les equipes de la listes au tournois//on commence le tournois pour avoir le tableau initial d'équipes
+        
+        
             table.addRow(new Object[]{elimination.getEquipesEli().get(i).getDescription()});
 
 //            if (i % 2 == 0) {
@@ -61,8 +64,7 @@ public class fTournoiElimination extends javax.swing.JDialog {
 //                }
 //            }
         }
-        //on commence le tournois pour avoir le tableau initial d'équipes
-        tabInitial = elimination.startTournois();
+        
     }
 
     /**
@@ -114,7 +116,6 @@ public class fTournoiElimination extends javax.swing.JDialog {
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel1.setText("Saisie des scores");
 
-        bValider.setIcon(new javax.swing.ImageIcon("D:\\Photos\\42.gif")); // NOI18N
         bValider.setText("Valider les scores et passer au tour suivant");
         bValider.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -136,7 +137,7 @@ public class fTournoiElimination extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(25, 25, 25)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 218, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 473, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
@@ -205,6 +206,7 @@ public class fTournoiElimination extends javax.swing.JDialog {
             
             TableColumn colNvxScore = new TableColumn();
             colNvxScore.setHeaderValue("Scores: ");
+          
             table.addColumn(colNvxScore);
             
             indiceCol = indiceCol + 2;
@@ -217,18 +219,7 @@ public class fTournoiElimination extends javax.swing.JDialog {
             table.fireTableStructureChanged();
             indiceRow = 0;
 
-<<<<<<< HEAD
-<<<<<<< HEAD
         
-=======
-        }
-        
-        tpAffichageGagnant.setVisible(true);
-        tpAffichageGagnant.setText("LE GAGNANT DU TOURNOI EST " + tabInitial[0].getDescription());
->>>>>>> Merge remote-tracking branch 'origin/master'
-=======
-        
->>>>>>> dd83eaee4a52b2ef70ed6f6aee9dc0eb7312abee
 
 
     }//GEN-LAST:event_bValiderActionPerformed
@@ -299,7 +290,6 @@ public class fTournoiElimination extends javax.swing.JDialog {
 
             } catch (InputMismatchException pbFormat) {
                 JOptionPane.showMessageDialog(null,  "Attention, rentrez un nombre entier", "ATTENTION" , JOptionPane.ERROR_MESSAGE);
-                
                
 //                indicateur = false;
                 
