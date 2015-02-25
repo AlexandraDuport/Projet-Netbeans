@@ -12,6 +12,7 @@ import javax.swing.table.DefaultTableModel;
 
 import Console.Poule;
 import Console.Equipe;
+import java.util.Arrays;
 
 
 
@@ -369,18 +370,17 @@ public class fEquipePoule extends javax.swing.JDialog {
     }//GEN-LAST:event_bAnnulerActionPerformed
 
     private void bCommencerTournoiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bCommencerTournoiActionPerformed
-       lVerif.setText("Clic sur commencer");
+
         
         if (tPoule.getRowCount()%4 ==0 && tPoule.getRowCount()!=0 )
         {
             
             for (int j=0 ; j<tPoule.getRowCount() ; j++) {
                     eq = new Equipe( table.getValueAt(j,0).toString(),  Integer.parseInt(table.getValueAt(j,1).toString()) );
-                    lVerif.setText("données récupérées");
+
                     tournoiPoule.getListeEquipesPoule().add(eq);
             }
-            
-            
+
             tournoiPoule.startPoule();
             ((fAccueil)getParent()).setPoule(tournoiPoule);
             recapEquipesPoule = new fPoule((fAccueil) this.getParent(), false);

@@ -31,7 +31,6 @@ public class fPoule extends javax.swing.JDialog {
         for (int i = 0; i < poule.getListePoulesTournoi().size(); i++) {
             AjoutColonne(table, "Poule " + Integer.toString(i)  );
             for (int j = 0; j < 4; j++) {
-                
                 table.setValueAt(poule.getListePoulesTournoi().get(i)[j].getDescription(), j, i); //
             }
         }

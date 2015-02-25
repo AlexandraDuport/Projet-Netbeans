@@ -59,7 +59,7 @@ public class Poule extends Tournoi {
 	public void startPoule() {
 		// on mélange la liste des équipes rentrées pour avoir un tirage au sort
 		// des poules aléatoires
-		listeEquipesPoule=getEquipes();
+		listeEquipesPoule=getListeEquipesPoule();
 		Collections.shuffle(listeEquipesPoule);
 
 		// toutes les 4 equipes on crée un nouveau tableau
