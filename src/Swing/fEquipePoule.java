@@ -95,7 +95,6 @@ public class fEquipePoule extends javax.swing.JDialog {
         bEnregistrements = new javax.swing.JButton();
         bExit = new javax.swing.JButton();
         bAnnuler = new javax.swing.JButton();
-        bPrecedent = new javax.swing.JButton();
 
         jButton1.setText("jButton1");
 
@@ -225,9 +224,9 @@ public class fEquipePoule extends javax.swing.JDialog {
                                 .addComponent(bEditer, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(0, 0, Short.MAX_VALUE))
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(cbEnregistrer, 0, 95, Short.MAX_VALUE)
+                                .addComponent(cbEnregistrer, 0, 61, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(bEnregistrements, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(bEnregistrements, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lVerif)
@@ -274,12 +273,12 @@ public class fEquipePoule extends javax.swing.JDialog {
                             .addComponent(lVerif)
                             .addComponent(cbEnregistrer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(bEnregistrements))
-                        .addGap(24, 24, 24))
+                        .addGap(41, 41, 41))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(lErreur, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())))
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
         );
 
         bExit.setText("Exit");
@@ -289,17 +288,10 @@ public class fEquipePoule extends javax.swing.JDialog {
             }
         });
 
-        bAnnuler.setText("Annuler");
+        bAnnuler.setText("Retour Accueil");
         bAnnuler.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bAnnulerActionPerformed(evt);
-            }
-        });
-
-        bPrecedent.setText("< Précédent");
-        bPrecedent.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bPrecedentActionPerformed(evt);
             }
         });
 
@@ -311,16 +303,14 @@ public class fEquipePoule extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(bPrecedent)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(bAnnuler)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(bExit))
-                    .addGroup(layout.createSequentialGroup()
                         .addGap(215, 215, 215)
                         .addComponent(jLabel1)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(21, 21, 21)
+                        .addComponent(bAnnuler)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(bExit)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -333,8 +323,7 @@ public class fEquipePoule extends javax.swing.JDialog {
                 .addGap(1, 1, 1)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(bExit)
-                    .addComponent(bAnnuler)
-                    .addComponent(bPrecedent))
+                    .addComponent(bAnnuler))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -392,14 +381,27 @@ public class fEquipePoule extends javax.swing.JDialog {
     }//GEN-LAST:event_bAnnulerActionPerformed
 
     private void bCommencerTournoiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bCommencerTournoiActionPerformed
-
+try{
         if (tPoule.getRowCount() % 4 == 0 && tPoule.getRowCount() != 0) {
 
-            for (int j = 0; j < tPoule.getRowCount(); j++) {
-                eq = new Equipe(table.getValueAt(j, 0).toString(), Integer.parseInt(table.getValueAt(j, 1).toString()));
+           boolean indicateur=true;
+     for (int j = 0; j < tPoule.getRowCount(); j++) {
 
+            eq = new Equipe(table.getValueAt(j, 0).toString(), Integer.parseInt(table.getValueAt(j, 1).toString()));
+            if (tournoiPoule.rechercheEquipe(table.getValueAt(j, 0).toString()) == false) {
                 tournoiPoule.getListeEquipesPoule().add(eq);
+            } else{
+                 JOptionPane.showMessageDialog(null, "Vous ne pouvez pas ajouter deux fois la meme equipe.\n Merci de supprimer les equipes identiques.","ATTENTION", JOptionPane.ERROR_MESSAGE);
+                tournoiPoule.getListeEquipesPoule().clear();
+                indicateur = false;
+                break;
             }
+
+        }
+
+        if (indicateur == false) {
+            return;
+        }
 
             tournoiPoule.startPoule();
             ((fAccueil) getParent()).setPoule(tournoiPoule);
@@ -411,14 +413,18 @@ public class fEquipePoule extends javax.swing.JDialog {
         }
         lErreur.setFont(new java.awt.Font("Courier New", 1, 12));
         lErreur.setText("Ajoutez encore " + (4 - tPoule.getRowCount() % 4) + " équipes pour compléter une poule");
-
-
+}catch(Throwable e){
+    
+}
     }//GEN-LAST:event_bCommencerTournoiActionPerformed
 
     private void bEditerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bEditerActionPerformed
-
+try{
         table.setValueAt(tfNomEquipe.getText(), tPoule.getSelectedRow(), 0);
         table.setValueAt(tfNombreJoueur.getText(), tPoule.getSelectedRow(), 1);
+}catch(Throwable e){
+    
+}
     }//GEN-LAST:event_bEditerActionPerformed
 
     private void tPouleMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tPouleMouseClicked
@@ -436,18 +442,16 @@ public class fEquipePoule extends javax.swing.JDialog {
     }//GEN-LAST:event_tfNombreJoueurActionPerformed
 
     private void bSupprimerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bSupprimerActionPerformed
-
+try{
         table.removeRow(tPoule.getSelectedRow());
         i--;
         lNombreEquipesEnregistrees.setText(Integer.toString(i));
         tfNombreJoueur.setText("");
         tfNomEquipe.setText("");
+}catch(Throwable e){
+    
+}
     }//GEN-LAST:event_bSupprimerActionPerformed
-
-    private void bPrecedentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bPrecedentActionPerformed
-        getParent().setVisible(true);
-        setVisible(false);
-    }//GEN-LAST:event_bPrecedentActionPerformed
 
     private void bEnregistrementsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bEnregistrementsActionPerformed
         Equipe e = record.rechercheEquipe((String) cbEnregistrer.getSelectedItem());
@@ -505,7 +509,6 @@ public class fEquipePoule extends javax.swing.JDialog {
     private javax.swing.JButton bEditer;
     private javax.swing.JButton bEnregistrements;
     private javax.swing.JButton bExit;
-    private javax.swing.JButton bPrecedent;
     private javax.swing.JButton bSupprimer;
     private javax.swing.JComboBox cbEnregistrer;
     private javax.swing.JButton jButton1;

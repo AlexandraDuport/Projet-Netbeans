@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 
 public class Poule extends Tournoi {
@@ -144,6 +145,17 @@ public class Poule extends Tournoi {
 			affichage(listePoulesTournoi.get(i));
 			System.out.println("\n");
 		}
+	}
+        
+        	public boolean rechercheEquipe(String nom) {
+		Iterator<Equipe> it = getListeEquipesPoule().iterator();
+		while (it.hasNext() == true) {
+			Equipe e = it.next();
+			if (e.getDescription().matches(nom) == true) {
+				return true;
+			} 			
+		}
+		return false;
 	}
 
 	public List<Equipe> getListeEquipesPoule() {
