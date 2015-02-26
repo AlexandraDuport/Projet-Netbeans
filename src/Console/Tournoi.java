@@ -172,7 +172,7 @@ public abstract class Tournoi {
 	// utilisee dans addTeam: permettra de verifier qu'une equipe ne peut pas
 	// être ajoutée deux fois retourne vrai si l'equipe existe deja, faux sinon
 	public boolean rechercheEquipe(String nom) {
-		Iterator<Equipe> it = equipes.iterator();
+		Iterator<Equipe> it = getEquipes().iterator();
 		while (it.hasNext() == true) {
 			Equipe e = it.next();
 			if (e.getDescription().matches(nom) == true) {

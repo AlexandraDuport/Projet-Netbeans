@@ -10,6 +10,7 @@ import Console.Enregistrements;
 import Console.Equipe;
 import java.awt.Color;
 import java.awt.Frame;
+import java.awt.HeadlessException;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.logging.Level;
@@ -18,7 +19,8 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 public class fEquipeElimination extends javax.swing.JDialog {
-Enregistrements record;
+
+    Enregistrements record;
     private fAccueil accueil;
     private fElimination recapEquipesElimination;
     private Elimination tournoiElimination;
@@ -30,7 +32,6 @@ Enregistrements record;
      *
      * Creates new form fEquipeElimination
      */
-
     //CONSTRUCTEUR
     public fEquipeElimination(java.awt.Frame parent, boolean modal) throws IOException {
         super(parent, modal);
@@ -38,15 +39,13 @@ Enregistrements record;
         this.setTitle("Saisie des équipes");
 
         tournoiElimination = ((fAccueil) getParent()).getElimination();
-        
+
         //ajout des equipes enregistrées dans la comboBox
-        record=new Enregistrements("Equipes.txt");
+        record = new Enregistrements("Equipes.txt");
         record.chargerListeEquipes();
-        for(int j =0;j<record.getEquipes().size();j++){
-        cbEnregistrer.addItem(record.getEquipes().get(j).getDescription());
+        for (int j = 0; j < record.getEquipes().size(); j++) {
+            cbEnregistrer.addItem(record.getEquipes().get(j).getDescription());
         }
-        
-        
 
         lNombreEquipesEnregistrees.setText(Integer.toString(i));
         table = (DefaultTableModel) tElimination.getModel();
@@ -90,7 +89,6 @@ Enregistrements record;
         bEnregistrer = new javax.swing.JToggleButton();
         bAnnuler = new javax.swing.JButton();
         bExit = new javax.swing.JButton();
-        bPrecedent = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -242,7 +240,7 @@ Enregistrements record;
                 .addContainerGap())
         );
 
-        bAnnuler.setText("Annuler");
+        bAnnuler.setText("Retour Accueil");
         bAnnuler.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bAnnulerActionPerformed(evt);
@@ -253,13 +251,6 @@ Enregistrements record;
         bExit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bExitActionPerformed(evt);
-            }
-        });
-
-        bPrecedent.setText("< Précédent");
-        bPrecedent.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bPrecedentActionPerformed(evt);
             }
         });
 
@@ -275,11 +266,9 @@ Enregistrements record;
                 .addComponent(jLabel1)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(bPrecedent)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(30, 30, 30)
                 .addComponent(bAnnuler)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(bExit)
                 .addContainerGap())
         );
@@ -293,8 +282,7 @@ Enregistrements record;
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(bExit)
-                    .addComponent(bAnnuler)
-                    .addComponent(bPrecedent))
+                    .addComponent(bAnnuler))
                 .addContainerGap())
         );
 
@@ -317,37 +305,32 @@ Enregistrements record;
         else {
             lErreur.setForeground(Color.blue);
             lErreur.setText("Entrée prise en compte");
-            Equipe e= new Equipe(tfNomEquipe.getText(), Integer.parseInt(tfNombreJoueur.getText())); 
+            Equipe e = new Equipe(tfNomEquipe.getText(), Integer.parseInt(tfNombreJoueur.getText()));
             table.addRow(new Object[]{tfNomEquipe.getText(), tfNombreJoueur.getText()});
             i++;
 
-
-
 //proposition de l'enregistrement d'une équipe dans le fichier des equipes si celle ci n'y est pas déja
-            if(record.rechercheEquipe(tfNomEquipe.getText())==null){
-              //Affichage d'une fenetre demandant a l'utilisateur de confirmer son choix de revenir à l'accueil
-        int choix = JOptionPane.showConfirmDialog(this, "Voulez vous enregistrer la nouvelle equipe cree ? \nElle sera disponible pour le prochain tournoi !",
-            "Enregistrer ? ", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+            if (record.rechercheEquipe(tfNomEquipe.getText()) == null) {
+                //Affichage d'une fenetre demandant a l'utilisateur de confirmer son choix de revenir à l'accueil
+                int choix = JOptionPane.showConfirmDialog(this, "Voulez vous enregistrer la nouvelle equipe cree ? \nElle sera disponible pour le prochain tournoi !",
+                        "Enregistrer ? ", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
 
-        //si l'utilisateur selectionne oui il retourne a l'accueil et si il selec non il annule son retour
-        if (choix==JOptionPane.YES_OPTION) {
-            try {
-                              
-                record.reecritEquipe(e);
-            } catch (IOException ex) {
-                Logger.getLogger(fEquipeElimination.class.getName()).log(Level.SEVERE, null, ex);
+                //si l'utilisateur selectionne oui il retourne a l'accueil et si il selec non il annule son retour
+                if (choix == JOptionPane.YES_OPTION) {
+                    try {
+
+                        record.reecritEquipe(e);
+                    } catch (IOException ex) {
+                        Logger.getLogger(fEquipeElimination.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
             }
-            }
-            }  
-            
+
             tfNomEquipe.setText("");
             tfNombreJoueur.setText("");
             lNombreEquipesEnregistrees.setText(Integer.toString(i));
-            
-            
-            
-        }
 
+        }
 
 
     }//GEN-LAST:event_bAjouterActionPerformed
@@ -376,37 +359,45 @@ Enregistrements record;
     }//GEN-LAST:event_bExitActionPerformed
 
     private void bEditerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bEditerActionPerformed
-
+try{
         table.setValueAt(tfNomEquipe.getText(), tElimination.getSelectedRow(), 0);
         table.setValueAt(tfNombreJoueur.getText(), tElimination.getSelectedRow(), 1);
+}catch(Throwable e){
+        
+    }
     }//GEN-LAST:event_bEditerActionPerformed
 
     private void bCommencerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bCommencerActionPerformed
-      boolean indicateur = true;
-        for (int j = 0; j < tElimination.getRowCount(); j++) {
-            
+        
+ try{
+     boolean indicateur=true;
+     for (int j = 0; j < tElimination.getRowCount(); j++) {
+
             eq = new Equipe(table.getValueAt(j, 0).toString(), Integer.parseInt(table.getValueAt(j, 1).toString()));
-            if (tournoiElimination.rechercheEquipe(table.getValueAt(j, 0).toString())==false){
-            tournoiElimination.getEquipesEli().add(eq);}
-            else {
-             JOptionPane.showConfirmDialog(this, "Vous ne pouvez pas ajouter deux fois la meme equipe.\n Merci de supprimer les equipes identiques.",
-                "ATTENTION", JOptionPane.OK_OPTION, JOptionPane.WARNING_MESSAGE);
-             tournoiElimination.setEquipesEli(null);
-             indicateur = false;
-             break;    
+            if (tournoiElimination.rechercheEquipe(table.getValueAt(j, 0).toString()) == false) {
+                tournoiElimination.getEquipesEli().add(eq);
+            } else{
+                 JOptionPane.showMessageDialog(null, "Vous ne pouvez pas ajouter deux fois la meme equipe.\n Merci de supprimer les equipes identiques.","ATTENTION", JOptionPane.ERROR_MESSAGE);
+                tournoiElimination.getEquipesEli().clear();
+                indicateur = false;
+                break;
             }
-            
+
         }
-        if (indicateur ==false){
+
+        if (indicateur == false) {
             return;
         }
-Equipe[] tabInter= tournoiElimination.startTournois();
-tournoiElimination.setEquipesEli(Arrays.asList(tabInter));
-        
+        Equipe[] tabInter = tournoiElimination.startTournois();
+        tournoiElimination.setEquipesEli(Arrays.asList(tabInter));
+
         ((fAccueil) getParent()).setElimination(tournoiElimination);
         recapEquipesElimination = new fElimination((fAccueil) this.getParent(), false);
         this.setVisible(false);
         recapEquipesElimination.setVisible(true);
+        }catch(Throwable e){
+    
+}
     }//GEN-LAST:event_bCommencerActionPerformed
 
     private void tEliminationMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tEliminationMouseClicked
@@ -416,26 +407,23 @@ tournoiElimination.setEquipesEli(Arrays.asList(tabInter));
     }//GEN-LAST:event_tEliminationMouseClicked
 
     private void bSupprimerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bSupprimerActionPerformed
-
+try{
         table.removeRow(tElimination.getSelectedRow());
         i--;
         lNombreEquipesEnregistrees.setText(Integer.toString(i));
         tfNombreJoueur.setText("");
         tfNomEquipe.setText("");
+}catch(Throwable e){
+                               }
     }//GEN-LAST:event_bSupprimerActionPerformed
 
-    private void bPrecedentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bPrecedentActionPerformed
-        getParent().setVisible(true);
-        setVisible(false);
-    }//GEN-LAST:event_bPrecedentActionPerformed
-
     private void bEnregistrerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bEnregistrerActionPerformed
-        Equipe e= record.rechercheEquipe((String) cbEnregistrer.getSelectedItem());
-        
+        Equipe e = record.rechercheEquipe((String) cbEnregistrer.getSelectedItem());
+
         table.addRow(new Object[]{e.getDescription(), Integer.toString(e.getNbJoueurs())});
-            i++;
-           lNombreEquipesEnregistrees.setText(Integer.toString(i));
-        
+        i++;
+        lNombreEquipesEnregistrees.setText(Integer.toString(i));
+
     }//GEN-LAST:event_bEnregistrerActionPerformed
 
     /**
@@ -487,7 +475,6 @@ tournoiElimination.setEquipesEli(Arrays.asList(tabInter));
     private javax.swing.JButton bEditer;
     private javax.swing.JToggleButton bEnregistrer;
     private javax.swing.JButton bExit;
-    private javax.swing.JButton bPrecedent;
     private javax.swing.JButton bSupprimer;
     private javax.swing.JComboBox cbEnregistrer;
     private javax.swing.JLabel jLabel1;

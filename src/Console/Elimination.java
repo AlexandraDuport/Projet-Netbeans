@@ -2,6 +2,7 @@ package Console;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 public class Elimination extends Tournoi {
@@ -104,6 +105,17 @@ public class Elimination extends Tournoi {
         // On retourne le nouveau tableau de tour
         return tabSuivant;
     }
+    @Override
+ 	public boolean rechercheEquipe(String nom) {
+		Iterator<Equipe> it = getEquipesEli().iterator();
+		while (it.hasNext() == true) {
+			Equipe e = it.next();
+			if (e.getDescription().matches(nom) == true) {
+				return true;
+			} 			
+		}
+		return false;
+	}
 
     public List<Equipe> getEquipesEli() {
         return equipesEli;
