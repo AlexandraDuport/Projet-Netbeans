@@ -1,0 +1,5 @@
+Lens;11
+OM;11
+Lyon;11
+Bordeaux;11
+PSG;11

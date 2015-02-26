@@ -6,6 +6,7 @@
 package Swing;
 
 import Console.Elimination;
+import Console.Enregistrements;
 import Console.Equipe;
 import java.awt.Color;
 import java.awt.Frame;
@@ -14,7 +15,7 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 public class fEquipeElimination extends javax.swing.JDialog {
-
+Enregistrements record;
     private fAccueil accueil;
     private fElimination recapEquipesElimination;
     private Elimination tournoiElimination;
@@ -34,6 +35,9 @@ public class fEquipeElimination extends javax.swing.JDialog {
         this.setTitle("Saisie des équipes");
 
         tournoiElimination = ((fAccueil) getParent()).getElimination();
+        
+        //ajout des equipes enregistrées dans la comboBox
+        record=new Enregistrements("equipes.txt");
 
         lNombreEquipesEnregistrees.setText(Integer.toString(i));
         table = (DefaultTableModel) tElimination.getModel();
@@ -73,6 +77,8 @@ public class fEquipeElimination extends javax.swing.JDialog {
         lErreur = new javax.swing.JLabel();
         bSupprimer = new javax.swing.JButton();
         lNombreEquipesEnregistrees = new javax.swing.JLabel();
+        cbEnregistrer = new javax.swing.JComboBox();
+        bEnregistrer = new javax.swing.JToggleButton();
         bAnnuler = new javax.swing.JButton();
         bExit = new javax.swing.JButton();
         bPrecedent = new javax.swing.JButton();
@@ -141,6 +147,8 @@ public class fEquipeElimination extends javax.swing.JDialog {
 
         lNombreEquipesEnregistrees.setText("    ");
 
+        bEnregistrer.setText("Ajouter Equipe Enregistrée");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -148,14 +156,6 @@ public class fEquipeElimination extends javax.swing.JDialog {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(bAjouter)
-                        .addGap(18, 18, 18)
-                        .addComponent(bEditer)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(bSupprimer)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(bCommencer))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -169,7 +169,21 @@ public class fEquipeElimination extends javax.swing.JDialog {
                         .addGap(24, 24, 24)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(tfNombreJoueur, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(tfNomEquipe, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(tfNomEquipe, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(cbEnregistrer, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(bEnregistrer))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(bAjouter)
+                                .addGap(18, 18, 18)
+                                .addComponent(bEditer)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(bSupprimer)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(bCommencer)))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -183,8 +197,8 @@ public class fEquipeElimination extends javax.swing.JDialog {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel3)
                             .addComponent(tfNomEquipe, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -202,12 +216,16 @@ public class fEquipeElimination extends javax.swing.JDialog {
                             .addComponent(bEditer)
                             .addComponent(bCommencer)
                             .addComponent(bSupprimer))
-                        .addGap(93, 93, 93))
+                        .addGap(24, 24, 24)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(cbEnregistrer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(bEnregistrer))
+                        .addGap(32, 32, 32))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(lErreur, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())))
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
         );
 
         bAnnuler.setText("Annuler");
@@ -413,9 +431,11 @@ tournoiElimination.setEquipesEli(Arrays.asList(tabInter));
     private javax.swing.JButton bAnnuler;
     private javax.swing.JButton bCommencer;
     private javax.swing.JButton bEditer;
+    private javax.swing.JToggleButton bEnregistrer;
     private javax.swing.JButton bExit;
     private javax.swing.JButton bPrecedent;
     private javax.swing.JButton bSupprimer;
+    private javax.swing.JComboBox cbEnregistrer;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
