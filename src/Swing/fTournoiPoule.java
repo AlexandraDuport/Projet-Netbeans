@@ -23,11 +23,12 @@ import javax.swing.table.TableColumn;
 
 public class fTournoiPoule extends javax.swing.JDialog {
 
-    private final Elimination suitePoule; // va servir a la fin du tour de poule
+    private Elimination suitePoule; // va servir a la fin du tour de poule
    
     private final ArrayList<Equipe> listeApresPoule = new ArrayList<Equipe>();
     private final DefaultTableModel table;
     private final Poule poule;
+    private fElimination fApresPoule; 
 
     /**
      * Creates new form fTournoiPoule
@@ -37,7 +38,7 @@ public class fTournoiPoule extends javax.swing.JDialog {
         initComponents();
 
         suitePoule = new Elimination(); // nouvelle élimination qu'on lancerea apres les tours de poule (6tours)
-
+         fApresPoule = new fElimination(parent, modal);
         poule = ((fAccueil) getParent()).getPoule();
         table = (DefaultTableModel) tPoule.getModel();
 
@@ -57,7 +58,7 @@ public class fTournoiPoule extends javax.swing.JDialog {
         JTextField score12 = new JTextField("    ");
         score12.setSize(30, 10);
         JLabel descriptifMatch1 = new JLabel();
-        descriptifMatch1.setText("****** 1er match ****** \n" + poule[0].getDescription() + " VS " + poule[1].getDescription());
+        descriptifMatch1.setText(poule[0].getDescription() + " VS " + poule[1].getDescription());
 
         p1.add(score11);
         p1.add(score12);
@@ -65,7 +66,7 @@ public class fTournoiPoule extends javax.swing.JDialog {
 
         BoxLayout b1 = new BoxLayout(p1, BoxLayout.PAGE_AXIS);
 
-        if (JOptionPane.YES_OPTION == JOptionPane.showConfirmDialog(null, p1, "1er match", JOptionPane.YES_NO_OPTION)) {
+        if (JOptionPane.YES_OPTION == JOptionPane.showConfirmDialog(null, p1, "1er match", JOptionPane.OK_OPTION)) {
 
             try {
 
@@ -100,7 +101,7 @@ public class fTournoiPoule extends javax.swing.JDialog {
         JTextField score22 = new JTextField("    ");
         score22.setSize(20, 10);
         JLabel descriptifMatch2 = new JLabel();
-        descriptifMatch2.setText("****** 2eme match ****** \n" + poule[0].getDescription() + " VS " + poule[2].getDescription());
+        descriptifMatch2.setText(poule[0].getDescription() + " VS " + poule[2].getDescription());
 
         p2.add(score21);
         p2.add(score22);
@@ -143,7 +144,7 @@ public class fTournoiPoule extends javax.swing.JDialog {
         JTextField score32 = new JTextField("    ");
         score32.setSize(20, 10);
         JLabel descriptifMatch3 = new JLabel();
-        descriptifMatch3.setText("****** 2eme match ****** \n" + poule[0].getDescription() + " VS " + poule[3].getDescription());
+        descriptifMatch3.setText(poule[0].getDescription() + " VS " + poule[3].getDescription());
 
         p3.add(score31);
         p3.add(score32);
@@ -185,7 +186,7 @@ public class fTournoiPoule extends javax.swing.JDialog {
         JTextField score42 = new JTextField("    ");
         score42.setSize(20, 10);
         JLabel descriptifMatch4 = new JLabel();
-        descriptifMatch4.setText("****** 4eme match ****** \n" + poule[1].getDescription() + " VS " + poule[2].getDescription());
+        descriptifMatch4.setText(poule[1].getDescription() + " VS " + poule[2].getDescription());
 
         p4.add(score41);
         p4.add(score42);
@@ -228,7 +229,7 @@ public class fTournoiPoule extends javax.swing.JDialog {
         JTextField score52 = new JTextField("    ");
         score52.setSize(20, 10);
         JLabel descriptifMatch5 = new JLabel();
-        descriptifMatch5.setText("****** 5eme match ****** \n" + poule[1].getDescription() + " VS " + poule[3].getDescription());
+        descriptifMatch5.setText(poule[1].getDescription() + " VS " + poule[3].getDescription());
 
         p5.add(score51);
         p5.add(score52);
@@ -271,7 +272,7 @@ public class fTournoiPoule extends javax.swing.JDialog {
         JTextField score62 = new JTextField("    ");
         score62.setSize(20, 10);
         JLabel descriptifMatch6 = new JLabel();
-        descriptifMatch1.setText("****** 6eme match ****** \n" + poule[2].getDescription() + " VS " + poule[3].getDescription());
+        descriptifMatch1.setText(poule[2].getDescription() + " VS " + poule[3].getDescription());
 
         p6.add(score61);
         p6.add(score62);
@@ -290,18 +291,13 @@ public class fTournoiPoule extends javax.swing.JDialog {
                 poule[2].setNbPointsMatch(Integer.parseInt(score61.getText().trim().toString()));
                 poule[3].setNbPointsMatch(Integer.parseInt(score62.getText().trim().toString()));
 
-//                indicateur = true;
                 // levée de l'exception d'un score négatif
             } catch (InputMismatchException pbFormat) {
                 JOptionPane.showMessageDialog(null, "Attention, rentrez un nombre entier", "ATTENTION", JOptionPane.ERROR_MESSAGE);
 
-//                indicateur = false;
             } catch (Exception nbPositif) {
                 JOptionPane.showMessageDialog(null, "Attention, un score de match ne peut pas être négatif", "ATTENTION", JOptionPane.ERROR_MESSAGE);
-//                indicateur = false;
-
             }
-
         }
 
         winLose(poule[2], poule[3]);
@@ -436,18 +432,18 @@ public class fTournoiPoule extends javax.swing.JDialog {
                             .addComponent(filler1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(182, 182, 182))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(lVerif)
-                            .addComponent(bContinuer))
+                        .addComponent(bContinuer)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(bLancerTourPoule)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(bExit)
                         .addContainerGap())))
             .addGroup(layout.createSequentialGroup()
-                .addGap(50, 50, 50)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(46, 46, 46)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 414, Short.MAX_VALUE)
+                    .addComponent(lVerif, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -456,14 +452,11 @@ public class fTournoiPoule extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel1)
                     .addComponent(filler1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(19, 19, 19)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 372, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(94, 94, 94)
-                        .addComponent(lVerif)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
+                .addGap(38, 38, 38)
+                .addComponent(lVerif)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 56, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(bExit)
                     .addComponent(bLancerTourPoule)
@@ -473,25 +466,26 @@ public class fTournoiPoule extends javax.swing.JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    
     private void bLancerTourPouleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bLancerTourPouleActionPerformed
         for (int i = 0; i < poule.getListePoulesTournoi().size(); i++) {
             matchPoule(poule.getListePoulesTournoi().get(i));
             gagnantsPoule(poule.getListePoulesTournoi().get(i), listeApresPoule);
         }
         bContinuer.setVisible(true);
-        lVerif.setText(listeApresPoule.get(0).getDescription() + "   ET   " +  listeApresPoule.get(1).getDescription());
+        lVerif.setText("2 meilleurs de chaque poule (2premières poules) /VERIFICATION\" : " + listeApresPoule.get(0).getDescription() + "   ET   " +  listeApresPoule.get(1).getDescription() + 
+                "\n   " + listeApresPoule.get(2).getDescription() + "   ET   " +  listeApresPoule.get(3).getDescription());
 
     }//GEN-LAST:event_bLancerTourPouleActionPerformed
 
     private void bContinuerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bContinuerActionPerformed
+        
+        suitePoule.setEquipesEli(listeApresPoule);
+        ((fAccueil)getParent()).setElimination(suitePoule);
+        
+        this.setVisible(false);
+       fApresPoule.setVisible(true);
 
-        AjoutColonne(table, "Nouveau Tour !");
-        AjoutColonne(table, "Scores: ");
-
-        for (int i = 0; i < listeApresPoule.size(); i++) {
-            table.setValueAt(listeApresPoule.get(i).getDescription(), i, 1);
-        }
     }//GEN-LAST:event_bContinuerActionPerformed
 
     /**

@@ -12,29 +12,36 @@ import javax.swing.table.TableColumn;
 import Swing.fEquipePoule;
 import javax.swing.table.TableCellRenderer;
 
-
 public class fPoule extends javax.swing.JDialog {
 
     private Poule poule;
     DefaultTableModel table;
     private fTournoiPoule saisieMatchPoule;
-    
 
     //CONSTRUCTEUR
     public fPoule(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
 //        fEquipePoule saisieEquipe = new fEquipePoule(parent, modal);
-        poule = ((fAccueil)getParent()).getPoule();
-        
+        poule = ((fAccueil) getParent()).getPoule();
+
         table = (DefaultTableModel) tAffichagePoule.getModel(); // table ou les poules seront affichées
+
+//        for (int i = 0; i < poule.getListePoulesTournoi().size(); i++) {
+//            for (int j = 0; j < 4; j++) {
+//                table.setValueAt(poule.getListePoulesTournoi().get(i)[j].getDescription(), j, i); //
+//            }
+//            
+//            AjoutColonne(table, "Poule " + Integer.toString(i));
         
-        
-        for (int i = 0; i < poule.getListePoulesTournoi().size(); i++) {
-            AjoutColonne(table, "Poule " + Integer.toString(i)  );
+        int i=0;
+        while(i < poule.getListePoulesTournoi().size()) {
             for (int j = 0; j < 4; j++) {
                 table.setValueAt(poule.getListePoulesTournoi().get(i)[j].getDescription(), j, i); //
             }
+            
+            AjoutColonne(table, "Poule " + Integer.toString(i));
+            i++;
         }
     }
 
@@ -43,9 +50,6 @@ public class fPoule extends javax.swing.JDialog {
         col.setHeaderValue(name);
         table.addColumn(col);
     }
-    
-
-
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -180,7 +184,7 @@ public class fPoule extends javax.swing.JDialog {
     }//GEN-LAST:event_bPrecedentActionPerformed
 
     private void bCommencerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bCommencerActionPerformed
-        saisieMatchPoule = new fTournoiPoule((fAccueil)getParent(), false);
+        saisieMatchPoule = new fTournoiPoule((fAccueil) getParent(), false);
         saisieMatchPoule.setVisible(true);
     }//GEN-LAST:event_bCommencerActionPerformed
 
