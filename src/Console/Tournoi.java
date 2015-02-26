@@ -138,10 +138,9 @@ public abstract class Tournoi {
 	// si les goal average sont les meme le tirage est aléatoire puisque le
 	// tableau de match de départ est aléatoire
 	public Equipe best(Equipe[] tab) {
-		int i = 0;
 		Equipe best = tab[0];
 		// Recherche pour trouver le meilleur goalAverage
-		for (i = 0; i < tab.length - 1; i++) {
+		for (int i = 0; i < tab.length-1; i++) {
 			if ((tab[i].getGoalAverage()) < (tab[i + 1].getGoalAverage())) {
 				best = tab[i + 1];
 			} else
