@@ -17,6 +17,8 @@ public class fPoule extends javax.swing.JDialog {
 
     private Poule poule;
     DefaultTableModel table;
+    private fTournoiPoule saisieMatchPoule;
+    
 
     //CONSTRUCTEUR
     public fPoule(java.awt.Frame parent, boolean modal) {
@@ -178,7 +180,8 @@ public class fPoule extends javax.swing.JDialog {
     }//GEN-LAST:event_bPrecedentActionPerformed
 
     private void bCommencerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bCommencerActionPerformed
-        // TODO add your handling code here:
+        saisieMatchPoule = new fTournoiPoule((fAccueil)getParent(), false);
+        saisieMatchPoule.setVisible(true);
     }//GEN-LAST:event_bCommencerActionPerformed
 
     /**
