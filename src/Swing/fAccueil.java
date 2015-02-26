@@ -6,7 +6,11 @@
 package Swing;
 
 import Console.Elimination;
+import Console.Enregistrements;
 import Console.Poule;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class fAccueil extends javax.swing.JFrame {
 
@@ -14,19 +18,24 @@ public class fAccueil extends javax.swing.JFrame {
     private fEquipeElimination saisieEquipeElimination;
     public Poule poule;
     public Elimination elimination;
+    Enregistrements record;
 
     /**
      * Creates new form fAccueil
      */
-    public fAccueil() {
+    public fAccueil() throws IOException {
 
         initComponents();
         this.setTitle("Accueil");
         //creation des fiches qui vont s'afficher au clic du bon bouton
+        //ajout des equipes enregistrées dans la comboBox
+        record = new Enregistrements("Equipes.txt");
+        record.chargerListeEquipes();
+        for(int j =0;j<record.getEquipes().size();j++){
+        cbSupprimer.addItem(record.getEquipes().get(j).getDescription());
+        }
         
-        
-
-    }
+       }
 
     public Poule getPoule() {
         return poule;
@@ -60,6 +69,9 @@ public class fAccueil extends javax.swing.JFrame {
         bEliminationDirecte = new javax.swing.JButton();
         bPoule = new javax.swing.JButton();
         bExit = new javax.swing.JButton();
+        cbSupprimer = new javax.swing.JComboBox();
+        bSupprimer = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -91,6 +103,16 @@ public class fAccueil extends javax.swing.JFrame {
             }
         });
 
+        bSupprimer.setText("Supprimer cette equipe");
+        bSupprimer.setToolTipText("");
+        bSupprimer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bSupprimerActionPerformed(evt);
+            }
+        });
+
+        jLabel3.setText("Outil de suppression des equipes enregistrées");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -101,8 +123,14 @@ public class fAccueil extends javax.swing.JFrame {
                         .addGap(29, 29, 29)
                         .addComponent(jLabel2)
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(cbSupprimer, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(bSupprimer))
+                            .addComponent(jLabel3))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(bExit)))
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
@@ -110,7 +138,7 @@ public class fAccueil extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(63, 63, 63)
                         .addComponent(bEliminationDirecte)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 81, Short.MAX_VALUE)
                         .addComponent(bPoule))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -128,8 +156,13 @@ public class fAccueil extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(bEliminationDirecte)
                     .addComponent(bPoule))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
-                .addComponent(bExit)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 50, Short.MAX_VALUE)
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(bExit)
+                    .addComponent(cbSupprimer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(bSupprimer))
                 .addContainerGap())
         );
 
@@ -137,25 +170,37 @@ public class fAccueil extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void bPouleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bPouleActionPerformed
-        poule = new Poule();
-        saisieEquipePoule = new fEquipePoule(this, false);
-        this.setVisible(false);
-        saisieEquipePoule.setVisible(true);
+        try {
+            poule = new Poule();
+            saisieEquipePoule = new fEquipePoule(this, false);
+            this.setVisible(false);
+            saisieEquipePoule.setVisible(true);
+        } catch (IOException ex) {
+            Logger.getLogger(fAccueil.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
 
     }//GEN-LAST:event_bPouleActionPerformed
 
     private void bEliminationDirecteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bEliminationDirecteActionPerformed
-        elimination = new Elimination();
-        saisieEquipeElimination = new fEquipeElimination(this, false);
-        this.setVisible(false);
-        saisieEquipeElimination.setVisible(true);
+        try {
+            elimination = new Elimination();
+            saisieEquipeElimination = new fEquipeElimination(this, false);
+            this.setVisible(false);
+            saisieEquipeElimination.setVisible(true);
+        } catch (IOException ex) {
+            Logger.getLogger(fAccueil.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
     }//GEN-LAST:event_bEliminationDirecteActionPerformed
 
     private void bExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bExitActionPerformed
         System.exit(0);
     }//GEN-LAST:event_bExitActionPerformed
+
+    private void bSupprimerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bSupprimerActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_bSupprimerActionPerformed
 
     /**
      * @param args the command line arguments
@@ -182,7 +227,11 @@ public class fAccueil extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new fAccueil().setVisible(true);
+                try {
+                    new fAccueil().setVisible(true);
+                } catch (IOException ex) {
+                    Logger.getLogger(fAccueil.class.getName()).log(Level.SEVERE, null, ex);
+                }
 
             }
         });
@@ -192,7 +241,10 @@ public class fAccueil extends javax.swing.JFrame {
     private javax.swing.JButton bEliminationDirecte;
     private javax.swing.JButton bExit;
     private javax.swing.JButton bPoule;
+    private javax.swing.JButton bSupprimer;
+    private javax.swing.JComboBox cbSupprimer;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     // End of variables declaration//GEN-END:variables
 }

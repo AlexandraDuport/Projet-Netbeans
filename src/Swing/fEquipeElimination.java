@@ -6,15 +6,19 @@
 package Swing;
 
 import Console.Elimination;
+import Console.Enregistrements;
 import Console.Equipe;
 import java.awt.Color;
 import java.awt.Frame;
+import java.io.IOException;
 import java.util.Arrays;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 public class fEquipeElimination extends javax.swing.JDialog {
-
+Enregistrements record;
     private fAccueil accueil;
     private fElimination recapEquipesElimination;
     private Elimination tournoiElimination;
@@ -28,12 +32,21 @@ public class fEquipeElimination extends javax.swing.JDialog {
      */
 
     //CONSTRUCTEUR
-    public fEquipeElimination(java.awt.Frame parent, boolean modal) {
+    public fEquipeElimination(java.awt.Frame parent, boolean modal) throws IOException {
         super(parent, modal);
         initComponents();
         this.setTitle("Saisie des équipes");
 
         tournoiElimination = ((fAccueil) getParent()).getElimination();
+        
+        //ajout des equipes enregistrées dans la comboBox
+        record=new Enregistrements("Equipes.txt");
+        record.chargerListeEquipes();
+        for(int j =0;j<record.getEquipes().size();j++){
+        cbEnregistrer.addItem(record.getEquipes().get(j).getDescription());
+        }
+        
+        
 
         lNombreEquipesEnregistrees.setText(Integer.toString(i));
         table = (DefaultTableModel) tElimination.getModel();
@@ -73,6 +86,8 @@ public class fEquipeElimination extends javax.swing.JDialog {
         lErreur = new javax.swing.JLabel();
         bSupprimer = new javax.swing.JButton();
         lNombreEquipesEnregistrees = new javax.swing.JLabel();
+        cbEnregistrer = new javax.swing.JComboBox();
+        bEnregistrer = new javax.swing.JToggleButton();
         bAnnuler = new javax.swing.JButton();
         bExit = new javax.swing.JButton();
         bPrecedent = new javax.swing.JButton();
@@ -141,6 +156,13 @@ public class fEquipeElimination extends javax.swing.JDialog {
 
         lNombreEquipesEnregistrees.setText("    ");
 
+        bEnregistrer.setText("Ajouter Equipe Enregistrée");
+        bEnregistrer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bEnregistrerActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -148,14 +170,6 @@ public class fEquipeElimination extends javax.swing.JDialog {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(bAjouter)
-                        .addGap(18, 18, 18)
-                        .addComponent(bEditer)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(bSupprimer)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(bCommencer))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -169,7 +183,21 @@ public class fEquipeElimination extends javax.swing.JDialog {
                         .addGap(24, 24, 24)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(tfNombreJoueur, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(tfNomEquipe, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(tfNomEquipe, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(cbEnregistrer, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(bEnregistrer))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(bAjouter)
+                                .addGap(18, 18, 18)
+                                .addComponent(bEditer)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(bSupprimer)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(bCommencer)))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -183,8 +211,8 @@ public class fEquipeElimination extends javax.swing.JDialog {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel3)
                             .addComponent(tfNomEquipe, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -202,12 +230,16 @@ public class fEquipeElimination extends javax.swing.JDialog {
                             .addComponent(bEditer)
                             .addComponent(bCommencer)
                             .addComponent(bSupprimer))
-                        .addGap(93, 93, 93))
+                        .addGap(24, 24, 24)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(cbEnregistrer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(bEnregistrer))
+                        .addGap(32, 32, 32))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(lErreur, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())))
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
         );
 
         bAnnuler.setText("Annuler");
@@ -285,29 +317,38 @@ public class fEquipeElimination extends javax.swing.JDialog {
         else {
             lErreur.setForeground(Color.blue);
             lErreur.setText("Entrée prise en compte");
+            Equipe e= new Equipe(tfNomEquipe.getText(), Integer.parseInt(tfNombreJoueur.getText())); 
             table.addRow(new Object[]{tfNomEquipe.getText(), tfNombreJoueur.getText()});
             i++;
+
+
+
+//proposition de l'enregistrement d'une équipe dans le fichier des equipes si celle ci n'y est pas déja
+            if(record.rechercheEquipe(tfNomEquipe.getText())==null){
+              //Affichage d'une fenetre demandant a l'utilisateur de confirmer son choix de revenir à l'accueil
+        int choix = JOptionPane.showConfirmDialog(this, "Voulez vous enregistrer la nouvelle equipe cree ? \nElle sera disponible pour le prochain tournoi !",
+            "Enregistrer ? ", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+
+        //si l'utilisateur selectionne oui il retourne a l'accueil et si il selec non il annule son retour
+        if (choix==JOptionPane.YES_OPTION) {
+            try {
+                              
+                record.reecritEquipe(e);
+            } catch (IOException ex) {
+                Logger.getLogger(fEquipeElimination.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            }
+            }  
+            
             tfNomEquipe.setText("");
             tfNombreJoueur.setText("");
             lNombreEquipesEnregistrees.setText(Integer.toString(i));
+            
+            
+            
         }
 
-//        try{
-//        lErreur.setForeground(Color.blue);
-//            lErreur.setText("Entrée prise en compte");
-//            table.addRow(new Object[] {tfNomEquipe.getText(), tfNombreJoueur.getText()});
-//            i++;
-//            tfNomEquipe.setText("");
-//            tfNombreJoueur.setText("");
-//            lNombreEquipesEnregistrees.setText(Integer.toString(i));
-//            
-//            while(tfNomEquipe!= null && tfNomEquipe != null);
-//        }
-//        
-//        catch (Exception e) {
-//                lErreur.setForeground(Color.RED);
-//                lErreur.setText("ERREUR, un des champs est vide" + e.getMessage());
-//        }
+
 
     }//GEN-LAST:event_bAjouterActionPerformed
 
@@ -318,11 +359,15 @@ public class fEquipeElimination extends javax.swing.JDialog {
                 "ATTENTION", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
 
         if (choix == JOptionPane.YES_OPTION) {
-            this.setVisible(false);
-            dispose();
-            //en cas de retour on charge une nouvelle fiche d'accueil
-            fAccueil accueil = new fAccueil();
-            accueil.setVisible(true);
+            try {
+                this.setVisible(false);
+                dispose();
+                //en cas de retour on charge une nouvelle fiche d'accueil
+                fAccueil accueil = new fAccueil();
+                accueil.setVisible(true);
+            } catch (IOException ex) {
+                Logger.getLogger(fEquipeElimination.class.getName()).log(Level.SEVERE, null, ex);
+            }
         } else;
     }//GEN-LAST:event_bAnnulerActionPerformed
 
@@ -337,10 +382,23 @@ public class fEquipeElimination extends javax.swing.JDialog {
     }//GEN-LAST:event_bEditerActionPerformed
 
     private void bCommencerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bCommencerActionPerformed
-
+      boolean indicateur = true;
         for (int j = 0; j < tElimination.getRowCount(); j++) {
+            
             eq = new Equipe(table.getValueAt(j, 0).toString(), Integer.parseInt(table.getValueAt(j, 1).toString()));
-            tournoiElimination.getEquipesEli().add(eq);
+            if (tournoiElimination.rechercheEquipe(table.getValueAt(j, 0).toString())==false){
+            tournoiElimination.getEquipesEli().add(eq);}
+            else {
+             JOptionPane.showConfirmDialog(this, "Vous ne pouvez pas ajouter deux fois la meme equipe.\n Merci de supprimer les equipes identiques.",
+                "ATTENTION", JOptionPane.OK_OPTION, JOptionPane.WARNING_MESSAGE);
+             tournoiElimination.setEquipesEli(null);
+             indicateur = false;
+             break;    
+            }
+            
+        }
+        if (indicateur ==false){
+            return;
         }
 Equipe[] tabInter= tournoiElimination.startTournois();
 tournoiElimination.setEquipesEli(Arrays.asList(tabInter));
@@ -371,6 +429,15 @@ tournoiElimination.setEquipesEli(Arrays.asList(tabInter));
         setVisible(false);
     }//GEN-LAST:event_bPrecedentActionPerformed
 
+    private void bEnregistrerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bEnregistrerActionPerformed
+        Equipe e= record.rechercheEquipe((String) cbEnregistrer.getSelectedItem());
+        
+        table.addRow(new Object[]{e.getDescription(), Integer.toString(e.getNbJoueurs())});
+            i++;
+           lNombreEquipesEnregistrees.setText(Integer.toString(i));
+        
+    }//GEN-LAST:event_bEnregistrerActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -396,7 +463,12 @@ tournoiElimination.setEquipesEli(Arrays.asList(tabInter));
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                fEquipeElimination dialog = new fEquipeElimination(new javax.swing.JFrame(), true);
+                fEquipeElimination dialog = null;
+                try {
+                    dialog = new fEquipeElimination(new javax.swing.JFrame(), true);
+                } catch (IOException ex) {
+                    Logger.getLogger(fEquipeElimination.class.getName()).log(Level.SEVERE, null, ex);
+                }
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -413,9 +485,11 @@ tournoiElimination.setEquipesEli(Arrays.asList(tabInter));
     private javax.swing.JButton bAnnuler;
     private javax.swing.JButton bCommencer;
     private javax.swing.JButton bEditer;
+    private javax.swing.JToggleButton bEnregistrer;
     private javax.swing.JButton bExit;
     private javax.swing.JButton bPrecedent;
     private javax.swing.JButton bSupprimer;
+    private javax.swing.JComboBox cbEnregistrer;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;

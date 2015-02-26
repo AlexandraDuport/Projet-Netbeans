@@ -10,6 +10,9 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import Swing.fEquipePoule;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.table.TableCellRenderer;
 
 public class fPoule extends javax.swing.JDialog {
@@ -168,10 +171,14 @@ public class fPoule extends javax.swing.JDialog {
 
         //si l'utilisateur selectionne oui il retourne a l'accueil et si il selec non il annule son retour
         if (choix == JOptionPane.YES_OPTION) {
-            this.setVisible(false);
-            //en cas de retour on charge une nouvelle fiche d'accueil
-            fAccueil accueil = new fAccueil();
-            accueil.setVisible(true);
+            try {
+                this.setVisible(false);
+                //en cas de retour on charge une nouvelle fiche d'accueil
+                fAccueil accueil = new fAccueil();
+                accueil.setVisible(true);
+            } catch (IOException ex) {
+                Logger.getLogger(fPoule.class.getName()).log(Level.SEVERE, null, ex);
+            }
         } else;
     }//GEN-LAST:event_bRetourAccueilActionPerformed
 

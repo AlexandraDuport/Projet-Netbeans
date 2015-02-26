@@ -7,10 +7,10 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class Enregistrements {
+public final class Enregistrements {
 
 	private String nomFichierEquipe;// nom du fichier contenant les equipes
-	private List<Equipe> equipes = new LinkedList<Equipe>();// ensemble des
+	private List<Equipe> equipes = new LinkedList<>();// ensemble des
 															// equipes du
 															// programme
 
@@ -37,27 +37,28 @@ public class Enregistrements {
 	// méthode permettant de charger la liste des equipes existantes
 	public void chargerListeEquipes() throws FileNotFoundException, IOException {
 		// initialisation de la liste des attributs
-		equipes = new LinkedList<Equipe>();
+		equipes = new LinkedList<>();
 		// ouverture du fichier en mode lecture
 		FileReader entree = new FileReader(nomFichierEquipe);
-		BufferedReader br = new BufferedReader(entree);
-		// lit et retourne une ligne entiere
-		String ligne = br.readLine();
-
-		while (ligne != null) {
-			// lit jusqu'a un caractere en particulier
-			String tab[] = ligne.split(";");
-			String nom = tab[0];
-			int nbJoueurs = Integer.parseInt(tab[1]);
-
-			// creation d'une nouvelle equipe et ajout dans la liste d'équipes
-			// preexistante
-			Equipe e = new Equipe(nom, nbJoueurs);
-			equipes.add(e);
-			// on lit la ligne suivante du fichier
-			ligne = br.readLine();
-		}
-		br.close();
+            // lit et retourne une ligne entiere
+            try (BufferedReader br = new BufferedReader(entree)) {
+                // lit et retourne une ligne entiere
+                String ligne = br.readLine();
+                
+                while (ligne != null) {
+                    // lit jusqu'a un caractere en particulier
+                    String tab[] = ligne.split(";");
+                    String nom = tab[0];
+                    int nbJoueurs = Integer.parseInt(tab[1]);
+                    
+                    // creation d'une nouvelle equipe et ajout dans la liste d'équipes
+                    // preexistante
+                    Equipe e = new Equipe(nom, nbJoueurs);
+                    equipes.add(e);
+                    // on lit la ligne suivante du fichier
+                    ligne = br.readLine();
+                }
+            }
 	}
 
 	public List<Equipe> getEquipes() {
@@ -74,19 +75,19 @@ public class Enregistrements {
 			IOException {
 		// ouverture du fichier en mode lecture
 		FileReader entree = new FileReader(nomFichierEquipe);
-		BufferedReader br = new BufferedReader(entree);
-		String ligne = br.readLine();
-
-		// nom du nouvel attribut
-		String fichier = team.getDescription() + ";" + team.getNbJoueurs();
-		// on stocke le nouvel attribut et on y concatene toute les lignes du
-		// fichier
-		while (ligne != null) {
-			fichier = fichier.concat("\r\n" + ligne);
-			ligne = br.readLine();
-		}
-		// on arrete la lecture
-		br.close();
+                String fichier;
+            try (BufferedReader br = new BufferedReader(entree)) {
+                String ligne = br.readLine();
+                // nom du nouvel attribut
+                fichier = team.getDescription() + ";" + team.getNbJoueurs();
+                // on stocke le nouvel attribut et on y concatene toute les lignes du
+                // fichier
+                while (ligne != null) {
+                    fichier = fichier.concat("\r\n" + ligne);
+                    ligne = br.readLine();
+                }
+                // on arrete la lecture
+            }
 		// on ecrit la chaine de caractÃ¨re du fichier entier en ecrivant par
 		// dessus l'ancien
 		try {
@@ -108,33 +109,34 @@ public class Enregistrements {
 			IOException {
 		// ouverture en mode lecture
 		FileReader entree = new FileReader(nomFichierEquipe);
-		BufferedReader br = new BufferedReader(entree);
-		// lit et retourne une ligne entiere
-		String ligne = br.readLine();
-
-		// on recupere la chaine de caractere du fichier sans l'equipe
-		// recherchee
-		String fichier = null;
-		while (ligne != null) {
-			// on ne recupere donc pas la chaine de caractere de la ligne a
-			// supprimer
-			if (ligne.contains(nomEquipe) == false) {
-				// on passe donc Ã  l'equipe suivante
-				ligne = br.readLine();
-			} else {
-
-				// on concatene toutes les lignes du fichier dans une chaine de
-				// caractere
-				if (fichier != null) {
-					fichier = fichier.concat("\n" + ligne);
-				} else {
-					fichier = ligne;
-				}
-				ligne = br.readLine();
-			}
-		}
+                String fichier;
+            // lit et retourne une ligne entiere
+            try (BufferedReader br = new BufferedReader(entree)) {
+                // lit et retourne une ligne entiere
+                String ligne = br.readLine();
+                // on recupere la chaine de caractere du fichier sans l'equipe
+                // recherchee
+                fichier = null;
+                while (ligne != null) {
+                    // on ne recupere donc pas la chaine de caractere de la ligne a
+                    // supprimer
+                    if (ligne.contains(nomEquipe) == false) {
+                        // on passe donc Ã  l'equipe suivante
+                        ligne = br.readLine();
+                    } else {
+                        
+                        // on concatene toutes les lignes du fichier dans une chaine de
+                        // caractere
+                        if (fichier != null) {
+                            fichier = fichier.concat("\n" + ligne);
+                        } else {
+                            fichier = ligne;
+                        }
+                        ligne = br.readLine();
+                    }
+                }
 		// on arrete la lecture
-		br.close();
+            }
 
 		// on reecrit le fichier equipe
 		try {
@@ -154,7 +156,7 @@ public class Enregistrements {
 		while (it.hasNext() == true) {
 			Equipe e = it.next();
 			e.affichageConsole();
-			;
+			
 		}
 	}
 
