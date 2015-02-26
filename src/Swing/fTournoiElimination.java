@@ -9,6 +9,7 @@ import Console.Elimination;
 import static Console.Elimination.tabSize;
 import Console.Equipe;
 import java.awt.Color;
+import java.io.IOException;
 import java.util.InputMismatchException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -253,11 +254,15 @@ public class fTournoiElimination extends javax.swing.JDialog {
 
         //si l'utilisateur selectionne oui il retourne a l'accueil et si il selec non il annule son retour
         if (choix == JOptionPane.YES_OPTION) {
-            this.setVisible(false);
-
-            //en cas de retour on charge une nouvelle fiche d'accueil
-            fAccueil accueil = new fAccueil();
-            accueil.setVisible(true);
+            try {
+                this.setVisible(false);
+                
+                //en cas de retour on charge une nouvelle fiche d'accueil
+                fAccueil accueil = new fAccueil();
+                accueil.setVisible(true);
+            } catch (IOException ex) {
+                Logger.getLogger(fTournoiElimination.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
 
 

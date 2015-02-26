@@ -3,61 +3,67 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package Swing;
 
+import Console.Enregistrements;
 import java.awt.Color;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 import Console.Poule;
 import Console.Equipe;
+import java.io.IOException;
 import java.util.Arrays;
-
-
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class fEquipePoule extends javax.swing.JDialog {
-    
+
     public fPoule recapEquipesPoule;
-    public int i=0;
+    public int i = 0;
     Poule tournoiPoule = new Poule();
+    Enregistrements record;
     DefaultTableModel table;
     Equipe eq;
-    
+
     /**
      * Creates new form fEquipePoule
+     *
      * @param parent
      * @param modal
      */
-    public fEquipePoule(java.awt.Frame parent, boolean modal) {
-        
+    public fEquipePoule(java.awt.Frame parent, boolean modal) throws IOException {
+
         super(parent, modal);
         initComponents();
-       
+
         this.setTitle("Saisie des équipes pour le mode poule");
-        tournoiPoule=((fAccueil)getParent()).getPoule();
-        
+        tournoiPoule = ((fAccueil) getParent()).getPoule();
+
         lNombreEquipesEnregistrees.setText(Integer.toString(i));
         table = (DefaultTableModel) tPoule.getModel();
-        
+
+        //ajout des equipes enregistrées dans la comboBox
+        record = new Enregistrements("Equipes.txt");
+        record.chargerListeEquipes();
+        for (int j = 0; j < record.getEquipes().size(); j++) {
+            cbEnregistrer.addItem(record.getEquipes().get(j).getDescription());
+        }
+
         recapEquipesPoule = new fPoule(parent, modal);
     }
 
-    
     //METHODE
     //Retourne true si le paramètre est numérique, false dans le cas contraire
-    private boolean isNumeric(String carac){
-    try {
-      Integer.parseInt(String.valueOf(carac));
+    private boolean isNumeric(String carac) {
+        try {
+            Integer.parseInt(String.valueOf(carac));
+        } catch (NumberFormatException e) {
+            return false;
+        }
+        return true;
     }
-    catch (NumberFormatException e) {
-      return false;            
-    }
-    return true;
-  }
-    
-    
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -85,6 +91,8 @@ public class fEquipePoule extends javax.swing.JDialog {
         bSupprimer = new javax.swing.JButton();
         lNombreEquipesEnregistrees = new javax.swing.JLabel();
         lVerif = new javax.swing.JLabel();
+        cbEnregistrer = new javax.swing.JComboBox();
+        bEnregistrements = new javax.swing.JButton();
         bExit = new javax.swing.JButton();
         bAnnuler = new javax.swing.JButton();
         bPrecedent = new javax.swing.JButton();
@@ -180,6 +188,13 @@ public class fEquipePoule extends javax.swing.JDialog {
 
         lVerif.setText("     ");
 
+        bEnregistrements.setText("Ajouter Equipe Enregistrée");
+        bEnregistrements.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bEnregistrementsActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -203,14 +218,21 @@ public class fEquipePoule extends javax.swing.JDialog {
                                 .addComponent(lNombreEquipesEnregistrees, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(bAjouter)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(bAjouter)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(bEditer, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(cbEnregistrer, 0, 95, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(bEnregistrements, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(bEditer, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lVerif)
                             .addComponent(bSupprimer))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(71, 71, 71)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addComponent(bCommencerTournoi)
@@ -247,9 +269,12 @@ public class fEquipePoule extends javax.swing.JDialog {
                             .addComponent(bAjouter)
                             .addComponent(bCommencerTournoi)
                             .addComponent(bSupprimer))
-                        .addGap(29, 29, 29)
-                        .addComponent(lVerif)
-                        .addGap(29, 29, 29))
+                        .addGap(25, 25, 25)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lVerif)
+                            .addComponent(cbEnregistrer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(bEnregistrements))
+                        .addGap(24, 24, 24))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(lErreur, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -325,92 +350,85 @@ public class fEquipePoule extends javax.swing.JDialog {
     }//GEN-LAST:event_tfNomEquipeActionPerformed
 
     private void bAjouterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bAjouterActionPerformed
-        
-        
+
         //ajout des entrées clavier dans le tableau 
         // si la case est non vide on ajoute l'entrée
-        if (tfNomEquipe.getText().trim().equals("") || tfNombreJoueur.getText().trim().equals("")){
+        if (tfNomEquipe.getText().trim().equals("") || tfNombreJoueur.getText().trim().equals("")) {
             lErreur.setForeground(Color.RED);
             lErreur.setText("ERREUR, un des champs est vide");
-        }   
-        
-        else if (!isNumeric(tfNombreJoueur.getText())  ) {
+        } else if (!isNumeric(tfNombreJoueur.getText())) {
             lErreur.setForeground(Color.BLACK);
             lErreur.setText("ERREUR, rentrez un chiffre dans le nombre de joueurs");
-        }
-        
-        else {
+        } else {
             lErreur.setForeground(Color.blue);
             lErreur.setText("Entrée prise en compte");
-            table.addRow(new Object[] {tfNomEquipe.getText(), tfNombreJoueur.getText()});
+            table.addRow(new Object[]{tfNomEquipe.getText(), tfNombreJoueur.getText()});
             i++;
             tfNomEquipe.setText("");
             tfNombreJoueur.setText("");
             lNombreEquipesEnregistrees.setText(Integer.toString(i));
-            }
-    
+        }
+
     }//GEN-LAST:event_bAjouterActionPerformed
 
     @SuppressWarnings("empty-statement")
     private void bAnnulerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bAnnulerActionPerformed
- 
-    //Affichage d'une fenetre demandant a l'utilisateur de confirmer son choix de revenir à l'accueil
-    int choix = JOptionPane.showConfirmDialog(this, "Voulez vous retourner à l'accueil ? \nAttention, les données que vous venez de rentrer seront effacées",
-    "ATTENTION", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);                
-    
-    
-       if (choix==JOptionPane.YES_OPTION) {
-            this.setVisible(false);
-            dispose();
-            //en cas de retour on charge une nouvelle fiche d'accueil
-            fAccueil accueil = new fAccueil();
-            accueil.setVisible(true);}
-       
-       else;
+
+        //Affichage d'une fenetre demandant a l'utilisateur de confirmer son choix de revenir à l'accueil
+        int choix = JOptionPane.showConfirmDialog(this, "Voulez vous retourner à l'accueil ? \nAttention, les données que vous venez de rentrer seront effacées",
+                "ATTENTION", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+
+        if (choix == JOptionPane.YES_OPTION) {
+            try {
+                this.setVisible(false);
+                dispose();
+                //en cas de retour on charge une nouvelle fiche d'accueil
+                fAccueil accueil = new fAccueil();
+                accueil.setVisible(true);
+            } catch (IOException ex) {
+                Logger.getLogger(fEquipePoule.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else;
     }//GEN-LAST:event_bAnnulerActionPerformed
 
     private void bCommencerTournoiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bCommencerTournoiActionPerformed
 
-        
-        if (tPoule.getRowCount()%4 ==0 && tPoule.getRowCount()!=0 )
-        {
-            
-            for (int j=0 ; j<tPoule.getRowCount() ; j++) {
-                    eq = new Equipe( table.getValueAt(j,0).toString(),  Integer.parseInt(table.getValueAt(j,1).toString()) );
+        if (tPoule.getRowCount() % 4 == 0 && tPoule.getRowCount() != 0) {
 
-                    tournoiPoule.getListeEquipesPoule().add(eq);
+            for (int j = 0; j < tPoule.getRowCount(); j++) {
+                eq = new Equipe(table.getValueAt(j, 0).toString(), Integer.parseInt(table.getValueAt(j, 1).toString()));
+
+                tournoiPoule.getListeEquipesPoule().add(eq);
             }
 
             tournoiPoule.startPoule();
-            ((fAccueil)getParent()).setPoule(tournoiPoule);
+            ((fAccueil) getParent()).setPoule(tournoiPoule);
             recapEquipesPoule = new fPoule((fAccueil) this.getParent(), false);
             this.setVisible(false);
             recapEquipesPoule.setVisible(true);
+        } else {
+            lErreur.setForeground(Color.RED);
         }
-        
-        else 
-           lErreur.setForeground(Color.RED);
-           lErreur.setFont(new java.awt.Font("Courier New", 1, 12));
-           lErreur.setText("Ajoutez encore " + (4 - tPoule.getRowCount()%4) + " équipes pour compléter une poule");
-           
-           
-           
+        lErreur.setFont(new java.awt.Font("Courier New", 1, 12));
+        lErreur.setText("Ajoutez encore " + (4 - tPoule.getRowCount() % 4) + " équipes pour compléter une poule");
+
+
     }//GEN-LAST:event_bCommencerTournoiActionPerformed
 
     private void bEditerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bEditerActionPerformed
-        
-        table.setValueAt(tfNomEquipe.getText(), tPoule.getSelectedRow(),0);
-        table.setValueAt(tfNombreJoueur.getText(), tPoule.getSelectedRow(),1);
+
+        table.setValueAt(tfNomEquipe.getText(), tPoule.getSelectedRow(), 0);
+        table.setValueAt(tfNombreJoueur.getText(), tPoule.getSelectedRow(), 1);
     }//GEN-LAST:event_bEditerActionPerformed
 
     private void tPouleMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tPouleMouseClicked
 
-        tfNomEquipe.setText(table.getValueAt(tPoule.getSelectedRow(),0).toString());
-        tfNombreJoueur.setText(table.getValueAt(tPoule.getSelectedRow(),1).toString());
+        tfNomEquipe.setText(table.getValueAt(tPoule.getSelectedRow(), 0).toString());
+        tfNombreJoueur.setText(table.getValueAt(tPoule.getSelectedRow(), 1).toString());
     }//GEN-LAST:event_tPouleMouseClicked
 
     private void bAjouterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_bAjouterKeyPressed
-        
+
     }//GEN-LAST:event_bAjouterKeyPressed
 
     private void tfNombreJoueurActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfNombreJoueurActionPerformed
@@ -418,7 +436,7 @@ public class fEquipePoule extends javax.swing.JDialog {
     }//GEN-LAST:event_tfNombreJoueurActionPerformed
 
     private void bSupprimerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bSupprimerActionPerformed
-        
+
         table.removeRow(tPoule.getSelectedRow());
         i--;
         lNombreEquipesEnregistrees.setText(Integer.toString(i));
@@ -427,9 +445,17 @@ public class fEquipePoule extends javax.swing.JDialog {
     }//GEN-LAST:event_bSupprimerActionPerformed
 
     private void bPrecedentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bPrecedentActionPerformed
-       getParent().setVisible(true);
-       setVisible(false);
+        getParent().setVisible(true);
+        setVisible(false);
     }//GEN-LAST:event_bPrecedentActionPerformed
+
+    private void bEnregistrementsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bEnregistrementsActionPerformed
+        Equipe e = record.rechercheEquipe((String) cbEnregistrer.getSelectedItem());
+
+        table.addRow(new Object[]{e.getDescription(), Integer.toString(e.getNbJoueurs())});
+        i++;
+        lNombreEquipesEnregistrees.setText(Integer.toString(i));
+    }//GEN-LAST:event_bEnregistrementsActionPerformed
 
     /**
      * @param args the command line arguments
@@ -456,14 +482,18 @@ public class fEquipePoule extends javax.swing.JDialog {
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                fEquipePoule dialog = new fEquipePoule(new javax.swing.JFrame(), true);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
+                try {
+                    fEquipePoule dialog = new fEquipePoule(new javax.swing.JFrame(), true);
+                    dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+                        @Override
+                        public void windowClosing(java.awt.event.WindowEvent e) {
+                            System.exit(0);
+                        }
+                    });
+                    dialog.setVisible(true);
+                } catch (IOException ex) {
+                    Logger.getLogger(fEquipePoule.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
@@ -473,9 +503,11 @@ public class fEquipePoule extends javax.swing.JDialog {
     private javax.swing.JButton bAnnuler;
     private javax.swing.JButton bCommencerTournoi;
     private javax.swing.JButton bEditer;
+    private javax.swing.JButton bEnregistrements;
     private javax.swing.JButton bExit;
     private javax.swing.JButton bPrecedent;
     private javax.swing.JButton bSupprimer;
+    private javax.swing.JComboBox cbEnregistrer;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;

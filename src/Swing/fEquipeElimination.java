@@ -319,9 +319,32 @@ Enregistrements record;
             lErreur.setText("Entrée prise en compte");
             table.addRow(new Object[]{tfNomEquipe.getText(), tfNombreJoueur.getText()});
             i++;
+
+
+
+//proposition de l'enregistrement d'une équipe dans le fichier des equipes si celle ci n'y est pas déja
+            if(record.rechercheEquipe(tfNomEquipe.getText())==null){
+              //Affichage d'une fenetre demandant a l'utilisateur de confirmer son choix de revenir à l'accueil
+        int choix = JOptionPane.showConfirmDialog(this, "Voulez vous enregistrer la nouvelle equipe cree ? \nElle sera disponible pour le prochain tournoi !",
+            "Enregistrer ? ", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+
+        //si l'utilisateur selectionne oui il retourne a l'accueil et si il selec non il annule son retour
+        if (choix==JOptionPane.YES_OPTION) {
+            try {
+                Equipe e= new Equipe(tfNomEquipe.getText(), Integer.parseInt(tfNombreJoueur.getText()));               
+                record.reecritEquipe(e);
+            } catch (IOException ex) {
+                Logger.getLogger(fEquipeElimination.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            }
+            }  
+            
             tfNomEquipe.setText("");
             tfNombreJoueur.setText("");
             lNombreEquipesEnregistrees.setText(Integer.toString(i));
+            
+            
+            
         }
 
 
@@ -335,11 +358,15 @@ Enregistrements record;
                 "ATTENTION", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
 
         if (choix == JOptionPane.YES_OPTION) {
-            this.setVisible(false);
-            dispose();
-            //en cas de retour on charge une nouvelle fiche d'accueil
-            fAccueil accueil = new fAccueil();
-            accueil.setVisible(true);
+            try {
+                this.setVisible(false);
+                dispose();
+                //en cas de retour on charge une nouvelle fiche d'accueil
+                fAccueil accueil = new fAccueil();
+                accueil.setVisible(true);
+            } catch (IOException ex) {
+                Logger.getLogger(fEquipeElimination.class.getName()).log(Level.SEVERE, null, ex);
+            }
         } else;
     }//GEN-LAST:event_bAnnulerActionPerformed
 
