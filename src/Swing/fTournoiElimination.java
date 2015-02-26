@@ -56,8 +56,8 @@ public class fTournoiElimination extends javax.swing.JDialog {
                 best = elimination.best(tabInitial).getDescription();
 
             }
-            tElimination.getCellRenderer(i * 2, 0).getTableCellRendererComponent(tElimination, elimination.getEquipesEli().get(i).getDescription(), true, true, i, 0).setBackground(couleur);
-            tElimination.getCellRenderer(i, 1).getTableCellRendererComponent(tElimination, "", true, true, i, 1).setBackground(couleur);
+            
+            tElimination.getCellRenderer(i, 0).getTableCellRendererComponent(tElimination, elimination.getEquipesEli().get(i).getDescription(), true, true, i, 0).setBackground(couleur);
             //on ajoute les equipes de la listes au tournois//on commence le tournois pour avoir le tableau initial d'équipes
             if (i % 2 == 0) {
                 if (couleur == Color.RED) {
@@ -95,7 +95,7 @@ public class fTournoiElimination extends javax.swing.JDialog {
         bValider = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         tpAffichageGagnant = new javax.swing.JTextPane();
-        jAccueil = new javax.swing.JButton();
+        bExit = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -121,13 +121,12 @@ public class fTournoiElimination extends javax.swing.JDialog {
             }
         });
 
-        tpAffichageGagnant.setFont(new java.awt.Font("Stencil", 0, 14)); // NOI18N
         jScrollPane2.setViewportView(tpAffichageGagnant);
 
-        jAccueil.setText("Retour Accueil");
-        jAccueil.addActionListener(new java.awt.event.ActionListener() {
+        bExit.setText("Retour Accueil");
+        bExit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jAccueilActionPerformed(evt);
+                bExitActionPerformed(evt);
             }
         });
 
@@ -138,19 +137,20 @@ public class fTournoiElimination extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addGap(274, 274, 274)
                 .addComponent(jLabel1)
-                .addContainerGap(372, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
+                .addContainerGap(360, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(24, 24, 24)
-                        .addComponent(jScrollPane1))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(52, 52, 52)
-                        .addComponent(jScrollPane2)
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(bValider, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jAccueil, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(25, 25, 25)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 473, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(bValider)
+                        .addGap(38, 38, 38)
+                        .addComponent(bExit)
+                        .addGap(31, 31, 31)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -158,18 +158,17 @@ public class fTournoiElimination extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1)
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 345, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 44, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(bValider, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jAccueil)
-                        .addGap(18, 18, 18))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(29, 29, 29))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(84, 84, 84)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 353, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(22, 22, 22)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(bExit)
+                    .addComponent(bValider, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
         );
 
         pack();
@@ -264,6 +263,24 @@ public class fTournoiElimination extends javax.swing.JDialog {
 
 
     }//GEN-LAST:event_jAccueilActionPerformed
+
+    private void bExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bExitActionPerformed
+              //Affichage d'une fenetre demandant a l'utilisateur de confirmer son choix de revenir à l'accueil
+        int choix = JOptionPane.showConfirmDialog(this, "Voulez vous retourner à l'accueil ? \nAttention, les données que vous venez de rentrer seront effacées",
+            "ATTENTION", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+
+        //si l'utilisateur selectionne oui il retourne a l'accueil et si il selec non il annule son retour
+        if (choix==JOptionPane.YES_OPTION) {
+            try {
+                this.setVisible(false);
+                //en cas de retour on charge une nouvelle fiche d'accueil
+                fAccueil accueil = new fAccueil();
+                accueil.setVisible(true);
+            } catch (IOException ex) {
+                Logger.getLogger(fElimination.class.getName()).log(Level.SEVERE, null, ex);
+            }
+}   
+    }//GEN-LAST:event_bExitActionPerformed
 
     // détermine les gagnant et crée le nouveau tableau
     public Equipe[] lancerTour(Elimination eli, Equipe[] tabInitial, boolean asChange) throws Exception {
@@ -400,8 +417,8 @@ public class fTournoiElimination extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton bExit;
     private javax.swing.JButton bValider;
-    private javax.swing.JButton jAccueil;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
