@@ -11,6 +11,7 @@ import Console.Poule;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 public class fAccueil extends javax.swing.JFrame {
 
@@ -201,7 +202,34 @@ public class fAccueil extends javax.swing.JFrame {
     }//GEN-LAST:event_bExitActionPerformed
 
     private void bSupprimerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bSupprimerActionPerformed
-        // TODO add your handling code here:
+        String aSupprimer = (String) cbSupprimer.getSelectedItem();
+        
+        //Affichage d'une fenetre demandant a l'utilisateur de confirmer son choix de revenir à l'accueil
+        int choix = JOptionPane.showConfirmDialog(this, "Etes vous sur de vouloir supprimer "+ aSupprimer+" de votre fichier equipe ?",
+                "ATTENTION", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+
+        if (choix == JOptionPane.YES_OPTION) {
+            try {
+                                
+            //sélection de l'equipe a supprimer
+            
+            //suppression de l'equipe choisie du fichier equipe
+            record.suppTeam(aSupprimer);
+            
+            //réinitialisation de la combo box
+            cbSupprimer.removeAllItems();
+            for(int j =0;j<record.getEquipes().size();j++){
+        cbSupprimer.addItem(record.getEquipes().get(j).getDescription());
+        }
+            
+        } catch (IOException ex) {
+            Logger.getLogger(fAccueil.class.getName()).log(Level.SEVERE, null, ex);
+        }
+            
+            
+        }
+       
+        
     }//GEN-LAST:event_bSupprimerActionPerformed
 
     /**

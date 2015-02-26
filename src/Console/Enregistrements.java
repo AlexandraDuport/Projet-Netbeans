@@ -120,7 +120,7 @@ public final class Enregistrements {
                 while (ligne != null) {
                     // on ne recupere donc pas la chaine de caractere de la ligne a
                     // supprimer
-                    if (ligne.contains(nomEquipe) == false) {
+                    if (ligne.contains(nomEquipe) == true) {
                         // on passe donc Ã  l'equipe suivante
                         ligne = br.readLine();
                     } else {

@@ -147,6 +147,7 @@ public class Poule extends Tournoi {
 		}
 	}
         
+        @Override
         	public boolean rechercheEquipe(String nom) {
 		Iterator<Equipe> it = getListeEquipesPoule().iterator();
 		while (it.hasNext() == true) {
