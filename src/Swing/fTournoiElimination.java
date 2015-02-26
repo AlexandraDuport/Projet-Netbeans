@@ -28,7 +28,13 @@ public class fTournoiElimination extends javax.swing.JDialog {
     int indiceCol = 0;
     int indiceRow = 0;
     private Color couleur;
-
+   boolean asChange = false;//variable qui indiquera si le tableau a changé
+   
+  //permettra de changer la valeur de l'indicateur dans lancer tour 
+   public void setAsChange(boolean change){
+            this.asChange=change;
+        }
+   
     /**
      * Creates new form fTournois
      *
@@ -48,18 +54,17 @@ public class fTournoiElimination extends javax.swing.JDialog {
         couleur = Color.RED;
         for (int i = 0; i < elimination.getEquipesEli().size(); i++) {
             tElimination.getCellRenderer(i * 2, 0).getTableCellRendererComponent(tElimination, elimination.getEquipesEli().get(i).getDescription(), true, true, i, 0).setBackground(couleur);
-            //tElimination.getCellRenderer(i, 1).getTableCellRendererComponent(tElimination, "", true, true, i, 1).setBackground(couleur);
-
+            tElimination.getCellRenderer(i, 1).getTableCellRendererComponent(tElimination, "", true, true, i, 1).setBackground(couleur);
             //on ajoute les equipes de la listes au tournois//on commence le tournois pour avoir le tableau initial d'équipes
             table.addRow(new Object[]{elimination.getEquipesEli().get(i).getDescription()});
 
-//            if (i % 2 == 0) {
-//                if (couleur == Color.RED) {
-//                    couleur = Color.cyan;
-//                } else {
-//                    couleur = Color.RED;
-//                }
-//            }
+            if (i % 2 == 0) {
+                if (couleur == Color.RED) {
+                    couleur = Color.cyan;
+                } else {
+                    couleur = Color.RED;
+                }
+            }
         }
 
     }
@@ -75,11 +80,11 @@ public class fTournoiElimination extends javax.swing.JDialog {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         tElimination = new javax.swing.JTable();
-        bExit = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         bValider = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         tpAffichageGagnant = new javax.swing.JTextPane();
+        jAccueil = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -95,13 +100,6 @@ public class fTournoiElimination extends javax.swing.JDialog {
         tElimination.setCellSelectionEnabled(true);
         jScrollPane1.setViewportView(tElimination);
 
-        bExit.setText("Exit");
-        bExit.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bExitActionPerformed(evt);
-            }
-        });
-
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel1.setText("Saisie des scores");
 
@@ -112,7 +110,15 @@ public class fTournoiElimination extends javax.swing.JDialog {
             }
         });
 
+        tpAffichageGagnant.setFont(new java.awt.Font("Stencil", 0, 14)); // NOI18N
         jScrollPane2.setViewportView(tpAffichageGagnant);
+
+        jAccueil.setText("Retour Accueil");
+        jAccueil.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jAccueilActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -121,19 +127,19 @@ public class fTournoiElimination extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addGap(274, 274, 274)
                 .addComponent(jLabel1)
-                .addContainerGap(360, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(372, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(24, 24, 24)
+                        .addComponent(jScrollPane1))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(25, 25, 25)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 473, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(52, 52, 52)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 266, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(bValider)
-                        .addGap(18, 18, 18)
-                        .addComponent(bExit)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(bValider, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jAccueil, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -141,127 +147,138 @@ public class fTournoiElimination extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 77, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 345, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 44, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 353, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(bExit)
-                            .addComponent(bValider, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(bValider, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jAccueil)
+                        .addGap(18, 18, 18))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(29, 29, 29))))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void bExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bExitActionPerformed
-        System.exit(0);
-    }//GEN-LAST:event_bExitActionPerformed
-
     private void bValiderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bValiderActionPerformed
         //notification que la table a changé
-
+     
+        
         table.fireTableDataChanged();
 
         try {
-            Equipe aGarder = null;//score récupérés et mis dans le tableau on arrete le proessus si il y a un problème au niveau des score
-           if (tabInitial.length%2!=0){
-              aGarder= elimination.best(tabInitial);
-                    indiceRow++;
-                }
-           while (indiceRow < tabInitial.length) {
-                
-                if (pasEgalite(tabInitial[indiceRow], tabInitial[indiceRow + 1]) == false) {
-                    indiceRow = 0;
-                    break;
-                } else {
-                    indiceRow = indiceRow + 2;
-                }
-            }
-            if (indiceRow == 0) {
-                return;
-            }
+
             //réinitialisation de l'indice des lignes pour le tour suivant
             indiceRow = 0;
-            
-            //tab Initial est maintenant rempli passage au tour suivant en écrasant le tableau initial par le tableau d'après
-            tabInitial = lancerTour(elimination, tabInitial);
-            //MODIF QUI CHIE ENCORE****************************************************************       
-            if (aGarder !=null){
-           tabInitial[tabInitial.length-1]=aGarder;
-             
-        }
-        } catch (Exception ex) {
-            Logger.getLogger(fTournoiElimination.class.getName()).log(Level.SEVERE, null, ex);
 
+            //tab Initial est maintenant rempli passage au tour suivant en écrasant le tableau initial par le tableau d'après
+            tabInitial = lancerTour(elimination, tabInitial, asChange);
+
+            indiceRow = 0;
+
+            if (indiceRow != 0) {
+                throw new Exception();
+            }
+
+            //en cas de probleme de saisie, on arrête la fonction
+        } catch (Exception saisie) {
+            indiceRow = 0;
+            return;
         }
 
         //ajout de nouvelles colonnes dans le tableau avec entrée des équipes du nouveau tour (maintenant dans le nouveau tableau initial)
-        TableColumn colNvxTour = new TableColumn();
-        colNvxTour.setHeaderValue("Nouveau Tour !");
-        table.addColumn(colNvxTour);
+        if (asChange == true) {
+            if (tabInitial != null) {
+                TableColumn colNvxTour = new TableColumn();
+                colNvxTour.setHeaderValue("Nouveau Tour !");
+                table.addColumn(colNvxTour);
 
-        if (tabInitial.length != 1) {
-            TableColumn colNvxScore = new TableColumn();
-            colNvxScore.setHeaderValue("Scores: ");
-            table.addColumn(colNvxScore);
-        } else {
-            //on empêche l'utilisateur de passer au tour suivant
-            bValider.setVisible(false);
-            //On affiche le nom du gagnant dans le panel
-            tpAffichageGagnant.setText("Le grand gagnant du tournois est" + tabInitial[0].getDescription());
-        }
-
-        indiceCol = indiceCol + 2;
-//ecriture du tableau avec traitement des impairs
-        for (int i = 0; i < tabInitial.length; i++) {
-            //on ecrit tout normallement si le tableau est pair
-            if (tabInitial.length % 2 == 0) {
-                table.setValueAt(tabInitial[i].getDescription(), indiceRow, indiceCol); //
-                indiceRow++;
-                //sinon on ecrit pas la meilleure des equipes que l'on réserve pour le tour suivant
-            } else {
-                Equipe e = elimination.best(tabInitial);
-                if (e.getDescription().matches(tabInitial[i].getDescription()) == false) {
-                    table.setValueAt(tabInitial[i].getDescription(), indiceRow, indiceCol); //
-                    indiceRow++;
+                if (tabInitial.length != 1) {
+                    TableColumn colNvxScore = new TableColumn();
+                    colNvxScore.setHeaderValue("Scores: ");
+                    table.addColumn(colNvxScore);
+                } else {
+                    //on empêche l'utilisateur de passer au tour suivant
+                    bValider.setVisible(false);
+                    //On affiche le nom du gagnant dans le panel
+                    tpAffichageGagnant.setVisible(true);
+                    tpAffichageGagnant.setText("Le grand gagnant du tournois est : " + tabInitial[0].getDescription());
                 }
 
+                indiceCol = indiceCol + 2;
+//ecriture du tableau avec traitement des impairs
+                for (int i = 0; i < tabInitial.length; i++) {
+                    //on ecrit tout normallement si le tableau est pair
+                    if ((tabInitial.length % 2 == 0) || (tabInitial.length == 1)) {
+                        table.setValueAt(tabInitial[i].getDescription(), indiceRow, indiceCol); //
+                        indiceRow++;
+                        //sinon on ecrit pas la meilleure des equipes que l'on réserve pour le tour suivant
+                    } else {
+                        Equipe e = elimination.best(tabInitial);
+                        if (e.getDescription().matches(tabInitial[i].getDescription()) == false) {
+                            table.setValueAt(tabInitial[i].getDescription(), indiceRow, indiceCol); //
+                            indiceRow++;
+                        }
+
+                    }
+                }
+}
+                table.fireTableStructureChanged();
+                indiceRow = 0;
             }
-        }
-        table.fireTableStructureChanged();
-        indiceRow = 0;
-
-        //lorsqu'on a trouvé le gagnant
-
+        
     }//GEN-LAST:event_bValiderActionPerformed
 
-    public Equipe[] lancerTour(Elimination eli, Equipe[] tabInitial) throws Exception {
+    private void jAccueilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jAccueilActionPerformed
+        //Affichage d'une fenetre demandant a l'utilisateur de confirmer son choix de revenir à l'accueil
+        int choix = JOptionPane.showConfirmDialog(this, "Voulez vous retourner à l'accueil ? \nAttention, les données que vous venez de rentrer seront effacées",
+                "ATTENTION", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+
+        //si l'utilisateur selectionne oui il retourne a l'accueil et si il selec non il annule son retour
+        if (choix == JOptionPane.YES_OPTION) {
+            this.setVisible(false);
+
+            //en cas de retour on charge une nouvelle fiche d'accueil
+            fAccueil accueil = new fAccueil();
+            accueil.setVisible(true);
+        }
+
+
+    }//GEN-LAST:event_jAccueilActionPerformed
+
+    // détermine les gagnant et crée le nouveau tableau
+    public Equipe[] lancerTour(Elimination eli, Equipe[] tabInitial, boolean asChange) throws Exception {
         int i = 0;// incrémenteur tableau initial
         int j = 0;// incrémenteur tableau du tour suivant
         Equipe tabSuivant[] = new Equipe[tabSize(tabInitial)];// tableau du tour
 
-        // suivant
         // cas d'un tableau impair
         if ((tabInitial.length) % 2 != 0) {
-            // On cherche le champion avec le meilleur goal average et on le
+			// On cherche le champion avec le meilleur goal average et on le
             // place automatiquement dans la première case du tableau suivant
             tabSuivant[0] = eli.best(tabInitial);
             j = 1; // incrémenteur du tableau suivant passe à 1
         }
-        
 
         while (i < (tabInitial.length) && (j < (tabSuivant.length))) {
+
+            // affectation des points de tournois et de match
+            if (pasEgalite(tabInitial[i], tabInitial[i + 1]) == false) {
+                setAsChange(false);
+                return tabInitial;
+            }
             tabSuivant[j] = eli.teamGagnante(tabInitial[i], tabInitial[i + 1]);
             // passage au prochain match du meme tour
             i = i + 2;
             // passage a la prochaine case du tableau du tour suivant
             j++;
         }
-
         // On retourne le nouveau tableau de tour
+        setAsChange(true);
         return tabSuivant;
     }
 
@@ -272,18 +289,14 @@ public class fTournoiElimination extends javax.swing.JDialog {
             if (eq1.getNbPointsMatch() == eq2.getNbPointsMatch()) {
                 throw new Exception();
             }
-
         } catch (Exception egalite) {
-            JOptionPane.showMessageDialog(null, "Attention, pas d'égalité possible pour le mode élimination directe", "ATTENTION", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Attention, pas d'egalité dans les eliminations!\n Merci de retaper vos scores !", "ATTENTION", JOptionPane.ERROR_MESSAGE);
             return false;
         }
         return true;
     }
 
     public void saisieScores(Equipe eq1, Equipe eq2) {
-        // indicateur qui laisse passer à la saisie suivante que si la
-        // derniere est conforme
-//        boolean indicateur = false;
 
         int score = 0;// score du match
 
@@ -292,30 +305,26 @@ public class fTournoiElimination extends javax.swing.JDialog {
             if (score < 0) {
                 throw new Exception();
             }
-            // affectation des points en récupérant le contenu des cases
+            // affectation des points equipe 1 puis passage a la ligne suivante
             score = Integer.parseInt((String) table.getValueAt(indiceRow, indiceCol + 1));
             eq1.setNbPointsMatch(score);
-            score = Integer.parseInt((String) table.getValueAt(indiceRow + 1, indiceCol + 1));
+            indiceRow++;
+            // affectation des points equipe 1 puis passage a la ligne suivante
+            score = Integer.parseInt((String) table.getValueAt(indiceRow, indiceCol + 1));
             eq2.setNbPointsMatch(score);
+            indiceRow++;
 
-//                indicateur = true;
             // levée de l'exception d'un score négatif
         } catch (InputMismatchException pbFormat) {
             JOptionPane.showMessageDialog(null, "Attention, rentrez un nombre entier", "ATTENTION", JOptionPane.ERROR_MESSAGE);
 
-//                indicateur = false;
         } catch (Exception nbPositif) {
             JOptionPane.showMessageDialog(null, "Attention, un score de match ne peut pas être négatif", "ATTENTION", JOptionPane.ERROR_MESSAGE);
-//                indicateur = false;
 
         }
 
     }
 
-//    private boolean[][] editable_cells;
-//    public void setCellEditable(int row, int col, boolean value) {
-//        this.editable_cells[row][col] = value; // set cell true/false
-//    }
     /**
      * @param args the command line arguments
      */
@@ -361,8 +370,8 @@ public class fTournoiElimination extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton bExit;
     private javax.swing.JButton bValider;
+    private javax.swing.JButton jAccueil;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;

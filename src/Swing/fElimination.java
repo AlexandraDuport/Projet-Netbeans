@@ -213,7 +213,7 @@ public class fElimination extends javax.swing.JDialog {
             fAccueil accueil = new fAccueil();
             accueil.setVisible(true);}
 
-        else;
+      
     }//GEN-LAST:event_bRetourAccueilActionPerformed
 
     private void bExit1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bExit1ActionPerformed
@@ -227,7 +227,7 @@ public class fElimination extends javax.swing.JDialog {
 
     private void bCommencerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bCommencerActionPerformed
         saisieMatchElimination = new fTournoiElimination(((fAccueil)getParent()), false);
-        //this.setVisible(false);
+        this.setVisible(false);
         saisieMatchElimination.setVisible(true);
     }//GEN-LAST:event_bCommencerActionPerformed
 
