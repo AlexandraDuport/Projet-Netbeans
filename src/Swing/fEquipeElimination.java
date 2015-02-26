@@ -317,6 +317,7 @@ Enregistrements record;
         else {
             lErreur.setForeground(Color.blue);
             lErreur.setText("Entrée prise en compte");
+            Equipe e= new Equipe(tfNomEquipe.getText(), Integer.parseInt(tfNombreJoueur.getText())); 
             table.addRow(new Object[]{tfNomEquipe.getText(), tfNombreJoueur.getText()});
             i++;
 
@@ -331,7 +332,7 @@ Enregistrements record;
         //si l'utilisateur selectionne oui il retourne a l'accueil et si il selec non il annule son retour
         if (choix==JOptionPane.YES_OPTION) {
             try {
-                Equipe e= new Equipe(tfNomEquipe.getText(), Integer.parseInt(tfNombreJoueur.getText()));               
+                              
                 record.reecritEquipe(e);
             } catch (IOException ex) {
                 Logger.getLogger(fEquipeElimination.class.getName()).log(Level.SEVERE, null, ex);
@@ -381,10 +382,23 @@ Enregistrements record;
     }//GEN-LAST:event_bEditerActionPerformed
 
     private void bCommencerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bCommencerActionPerformed
-
+      boolean indicateur = true;
         for (int j = 0; j < tElimination.getRowCount(); j++) {
+            
             eq = new Equipe(table.getValueAt(j, 0).toString(), Integer.parseInt(table.getValueAt(j, 1).toString()));
-            tournoiElimination.getEquipesEli().add(eq);
+            if (tournoiElimination.rechercheEquipe(table.getValueAt(j, 0).toString())==false){
+            tournoiElimination.getEquipesEli().add(eq);}
+            else {
+             JOptionPane.showConfirmDialog(this, "Vous ne pouvez pas ajouter deux fois la meme equipe.\n Merci de supprimer les equipes identiques.",
+                "ATTENTION", JOptionPane.OK_OPTION, JOptionPane.WARNING_MESSAGE);
+             tournoiElimination.setEquipesEli(null);
+             indicateur = false;
+             break;    
+            }
+            
+        }
+        if (indicateur ==false){
+            return;
         }
 Equipe[] tabInter= tournoiElimination.startTournois();
 tournoiElimination.setEquipesEli(Arrays.asList(tabInter));
