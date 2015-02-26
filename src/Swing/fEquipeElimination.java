@@ -10,7 +10,10 @@ import Console.Enregistrements;
 import Console.Equipe;
 import java.awt.Color;
 import java.awt.Frame;
+import java.io.IOException;
 import java.util.Arrays;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -29,7 +32,7 @@ Enregistrements record;
      */
 
     //CONSTRUCTEUR
-    public fEquipeElimination(java.awt.Frame parent, boolean modal) {
+    public fEquipeElimination(java.awt.Frame parent, boolean modal) throws IOException {
         super(parent, modal);
         initComponents();
         this.setTitle("Saisie des équipes");
@@ -37,7 +40,13 @@ Enregistrements record;
         tournoiElimination = ((fAccueil) getParent()).getElimination();
         
         //ajout des equipes enregistrées dans la comboBox
-        record=new Enregistrements("equipes.txt");
+        record=new Enregistrements("Equipes.txt");
+        record.chargerListeEquipes();
+        for(int j =0;j<record.getEquipes().size();j++){
+        cbEnregistrer.addItem(record.getEquipes().get(j).getDescription());
+        }
+        
+        
 
         lNombreEquipesEnregistrees.setText(Integer.toString(i));
         table = (DefaultTableModel) tElimination.getModel();
@@ -148,6 +157,11 @@ Enregistrements record;
         lNombreEquipesEnregistrees.setText("    ");
 
         bEnregistrer.setText("Ajouter Equipe Enregistrée");
+        bEnregistrer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bEnregistrerActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -310,22 +324,7 @@ Enregistrements record;
             lNombreEquipesEnregistrees.setText(Integer.toString(i));
         }
 
-//        try{
-//        lErreur.setForeground(Color.blue);
-//            lErreur.setText("Entrée prise en compte");
-//            table.addRow(new Object[] {tfNomEquipe.getText(), tfNombreJoueur.getText()});
-//            i++;
-//            tfNomEquipe.setText("");
-//            tfNombreJoueur.setText("");
-//            lNombreEquipesEnregistrees.setText(Integer.toString(i));
-//            
-//            while(tfNomEquipe!= null && tfNomEquipe != null);
-//        }
-//        
-//        catch (Exception e) {
-//                lErreur.setForeground(Color.RED);
-//                lErreur.setText("ERREUR, un des champs est vide" + e.getMessage());
-//        }
+
 
     }//GEN-LAST:event_bAjouterActionPerformed
 
@@ -389,6 +388,15 @@ tournoiElimination.setEquipesEli(Arrays.asList(tabInter));
         setVisible(false);
     }//GEN-LAST:event_bPrecedentActionPerformed
 
+    private void bEnregistrerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bEnregistrerActionPerformed
+        Equipe e= record.rechercheEquipe((String) cbEnregistrer.getSelectedItem());
+        
+        table.addRow(new Object[]{e.getDescription(), Integer.toString(e.getNbJoueurs())});
+            i++;
+           lNombreEquipesEnregistrees.setText(Integer.toString(i));
+        
+    }//GEN-LAST:event_bEnregistrerActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -414,7 +422,12 @@ tournoiElimination.setEquipesEli(Arrays.asList(tabInter));
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                fEquipeElimination dialog = new fEquipeElimination(new javax.swing.JFrame(), true);
+                fEquipeElimination dialog = null;
+                try {
+                    dialog = new fEquipeElimination(new javax.swing.JFrame(), true);
+                } catch (IOException ex) {
+                    Logger.getLogger(fEquipeElimination.class.getName()).log(Level.SEVERE, null, ex);
+                }
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
