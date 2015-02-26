@@ -24,11 +24,11 @@ import javax.swing.table.TableColumn;
 public class fTournoiPoule extends javax.swing.JDialog {
 
     private Elimination suitePoule; // va servir a la fin du tour de poule
-   
+
     private final ArrayList<Equipe> listeApresPoule = new ArrayList<Equipe>();
     private final DefaultTableModel table;
     private final Poule poule;
-    private fElimination fApresPoule; 
+    private fElimination fApresPoule;
 
     /**
      * Creates new form fTournoiPoule
@@ -37,8 +37,6 @@ public class fTournoiPoule extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
 
-        suitePoule = new Elimination(); // nouvelle élimination qu'on lancerea apres les tours de poule (6tours)
-         fApresPoule = new fElimination(parent, modal);
         poule = ((fAccueil) getParent()).getPoule();
         table = (DefaultTableModel) tPoule.getModel();
 
@@ -466,25 +464,27 @@ public class fTournoiPoule extends javax.swing.JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-    
+
     private void bLancerTourPouleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bLancerTourPouleActionPerformed
         for (int i = 0; i < poule.getListePoulesTournoi().size(); i++) {
             matchPoule(poule.getListePoulesTournoi().get(i));
             gagnantsPoule(poule.getListePoulesTournoi().get(i), listeApresPoule);
         }
         bContinuer.setVisible(true);
-        lVerif.setText("2 meilleurs de chaque poule (2premières poules) /VERIFICATION\" : " + listeApresPoule.get(0).getDescription() + "   ET   " +  listeApresPoule.get(1).getDescription() + 
-                "\n   " + listeApresPoule.get(2).getDescription() + "   ET   " +  listeApresPoule.get(3).getDescription());
+        lVerif.setText("2 meilleurs de chaque poule (2premières poules) /VERIFICATION\" : " + listeApresPoule.get(0).getDescription() + "   ET   " + listeApresPoule.get(1).getDescription()
+                + "  *******  " + listeApresPoule.get(2).getDescription() + "   ET   " + listeApresPoule.get(3).getDescription());
 
     }//GEN-LAST:event_bLancerTourPouleActionPerformed
 
     private void bContinuerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bContinuerActionPerformed
-        
+        suitePoule = new Elimination(); // nouvelle élimination qu'on lancerea apres les tours de poule (6tours)
         suitePoule.setEquipesEli(listeApresPoule);
-        ((fAccueil)getParent()).setElimination(suitePoule);
+        ((fAccueil) getParent()).setElimination(suitePoule);
         
+        fApresPoule = new fElimination((fAccueil) getParent(), false);
+
         this.setVisible(false);
-       fApresPoule.setVisible(true);
+        fApresPoule.setVisible(true);
 
     }//GEN-LAST:event_bContinuerActionPerformed
 

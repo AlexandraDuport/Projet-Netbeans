@@ -16,10 +16,7 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
-/**
- *
- * @author Sammy Guergachi <sguergachi at gmail.com>
- */
+ 
 public class fTournoiElimination extends javax.swing.JDialog {
 
     private final Elimination elimination;
