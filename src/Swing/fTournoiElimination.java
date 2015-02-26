@@ -49,13 +49,14 @@ public class fTournoiElimination extends javax.swing.JDialog {
         //tabInitial initialisé
         tabInitial = (Equipe[]) elimination.getEquipesEli().toArray();
         table = (DefaultTableModel) tElimination.getModel();
-        couleur = Color.RED;
+        //couleur = Color.RED;
         String best = null;
         for (int i = 0; i < elimination.getEquipesEli().size(); i++) {
             if ((((elimination.getEquipesEli().size()) % 2 != 0))) {
                 best = elimination.best(tabInitial).getDescription();
 
             }
+<<<<<<< HEAD
             
             tElimination.getCellRenderer(i, 0).getTableCellRendererComponent(tElimination, elimination.getEquipesEli().get(i).getDescription(), true, true, i, 0).setBackground(couleur);
             //on ajoute les equipes de la listes au tournois//on commence le tournois pour avoir le tableau initial d'équipes
@@ -66,6 +67,18 @@ public class fTournoiElimination extends javax.swing.JDialog {
                     couleur = Color.RED;
                 }
             }
+=======
+//            tElimination.getCellRenderer(i * 2, 0).getTableCellRendererComponent(tElimination, elimination.getEquipesEli().get(i).getDescription(), true, true, i, 0).setBackground(couleur);
+//            tElimination.getCellRenderer(i, 1).getTableCellRendererComponent(tElimination, "", true, true, i, 1).setBackground(couleur);
+//            //on ajoute les equipes de la listes au tournois//on commence le tournois pour avoir le tableau initial d'équipes
+//            if (i % 2 == 0) {
+//                if (couleur == Color.RED) {
+//                    couleur = Color.cyan;
+//                } else {
+//                    couleur = Color.RED;
+//                }
+//            }
+>>>>>>> origin/master
 
             if (best == null) {
 
