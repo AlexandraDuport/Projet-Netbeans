@@ -211,9 +211,7 @@ public class fElimination extends javax.swing.JDialog {
             this.setVisible(false);
             //en cas de retour on charge une nouvelle fiche d'accueil
             fAccueil accueil = new fAccueil();
-            accueil.setVisible(true);}
-
-      
+            accueil.setVisible(true);}      
     }//GEN-LAST:event_bRetourAccueilActionPerformed
 
     private void bExit1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bExit1ActionPerformed
