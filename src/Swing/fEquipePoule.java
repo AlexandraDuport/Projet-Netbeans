@@ -403,7 +403,9 @@ try{
             return;
         }
 
-            tournoiPoule.startPoule();
+       
+        
+             tournoiPoule.startPoule();
             ((fAccueil) getParent()).setPoule(tournoiPoule);
             recapEquipesPoule = new fPoule((fAccueil) this.getParent(), false);
             this.setVisible(false);

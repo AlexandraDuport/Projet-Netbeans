@@ -478,13 +478,32 @@ public class fTournoiPoule extends javax.swing.JDialog {
 
     private void bContinuerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bContinuerActionPerformed
         suitePoule = new Elimination(); // nouvelle élimination qu'on lancerea apres les tours de poule (6tours)
-        suitePoule.setEquipesEli(listeApresPoule);
-        ((fAccueil) getParent()).setElimination(suitePoule);
         
-        fApresPoule = new fElimination((fAccueil) getParent(), false);
+        
+        
+               
+        
+        
+        suitePoule.setEquipesEli(listeApresPoule);
+        
+         Equipe[] tabInter = suitePoule.startTournois();
+        suitePoule.setEquipesEli(Arrays.asList(tabInter));
 
+        ((fAccueil) getParent()).setElimination(suitePoule);
+        fApresPoule = new fElimination((fAccueil) getParent(), false);
         this.setVisible(false);
         fApresPoule.setVisible(true);
+        
+        
+        
+        
+ /*       
+        ((fAccueil) getParent()).setElimination(suitePoule);
+        
+        
+
+        this.setVisible(false);
+        fApresPoule.setVisible(true);*/
 
     }//GEN-LAST:event_bContinuerActionPerformed
 
