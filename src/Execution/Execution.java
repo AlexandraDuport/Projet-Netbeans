@@ -16,7 +16,7 @@ public class Execution {
 	private static Scanner scNom;
 	private static Scanner scNbJoueurs;
 	private static Scanner scChoix;
-
+        
 	private static Scanner scRecord;
 	private static String record;
 	private static Scanner teamSelection;

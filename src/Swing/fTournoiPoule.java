@@ -14,15 +14,18 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.InputMismatchException;
 import javax.swing.BoxLayout;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 
 public class fTournoiPoule extends javax.swing.JDialog {
 
     private final Elimination suitePoule; // va servir a la fin du tour de poule
-    private final ArrayList<Equipe> listeIntermediaire = new ArrayList<Equipe>(); // Va stocker le gagnant de chaque match de poule avec son goal average -> on l'utilisera ensuite dans la fct ... pour sort et chopper les 2 gagnants
+   
+    private final ArrayList<Equipe> listeApresPoule = new ArrayList<Equipe>();
     private final DefaultTableModel table;
     private final Poule poule;
 
@@ -43,57 +46,267 @@ public class fTournoiPoule extends javax.swing.JDialog {
                 table.addRow(new Object[]{poule.getListePoulesTournoi().get(i)[j].getDescription()});
             }
         }
-
+        bContinuer.setVisible(false);
     }
 
-    public void matchPoule(Equipe[] poule, ArrayList<Equipe> listeIntermediaire) {
+    public void matchPoule(Equipe[] poule) {
         //1er match
-        JPanel p = new JPanel();
-        JTextField score1 = new JTextField();
-        JTextField score2 = new JTextField();
+        JPanel p1 = new JPanel();
+        JTextField score11 = new JTextField("    ");
+        score11.setSize(30, 10);
+        JTextField score12 = new JTextField("    ");
+        score12.setSize(30, 10);
+        JLabel descriptifMatch1 = new JLabel();
+        descriptifMatch1.setText("****** 1er match ****** \n" + poule[0].getDescription() + " VS " + poule[1].getDescription());
 
-        p.add(score1);
-        p.add(score2);
+        p1.add(score11);
+        p1.add(score12);
+        p1.add(descriptifMatch1);
 
-        BoxLayout b = new BoxLayout(p, BoxLayout.PAGE_AXIS);
+        BoxLayout b1 = new BoxLayout(p1, BoxLayout.PAGE_AXIS);
 
-        if (JOptionPane.YES_OPTION == JOptionPane.showConfirmDialog(null, p, "****** 1er match ****** \n" + poule[0].getDescription() + " VS "
-                + poule[1].getDescription(), JOptionPane.YES_NO_OPTION)) {
+        if (JOptionPane.YES_OPTION == JOptionPane.showConfirmDialog(null, p1, "1er match", JOptionPane.YES_NO_OPTION)) {
 
-            poule[0].nbPointsMatch=score1.getText();
-            String strScore1 = score1.getText();
-            String strScore2 = score2.getText();
+            try {
+
+                if (Integer.parseInt(score11.getText().trim().toString()) < 0 || Integer.parseInt(score12.getText().trim().toString()) < 0) {
+                    throw new Exception();
+                }
+                // affectation des points en récupérant le contenu des cases
+                poule[0].setNbPointsMatch(Integer.parseInt(score11.getText().trim().toString()));
+                poule[1].setNbPointsMatch(Integer.parseInt(score12.getText().trim().toString()));
+
+//                indicateur = true;
+                // levée de l'exception d'un score négatif
+            } catch (InputMismatchException pbFormat) {
+                JOptionPane.showMessageDialog(null, "Attention, rentrez un nombre entier", "ATTENTION", JOptionPane.ERROR_MESSAGE);
+
+//                indicateur = false;
+            } catch (Exception nbPositif) {
+                JOptionPane.showMessageDialog(null, "Attention, un score de match ne peut pas être négatif", "ATTENTION", JOptionPane.ERROR_MESSAGE);
+//                indicateur = false;
+
+            }
+
         }
 
         winLose(poule[0], poule[1]);
-        teamGagnante(poule[0], poule[1]);
-          //mettre le vaiqueur dans la première case de listeIntermediaire
+        affectationGoalAverage(poule[0], poule[1]);
 
         //2eme match
-        System.out.println("2eme match de phase de poule:" + poule[0].getDescription() + " VS "
-                + poule[2].getDescription());
+        JPanel p2 = new JPanel();
+        JTextField score21 = new JTextField("    ");
+        score21.setSize(20, 10);
+        JTextField score22 = new JTextField("    ");
+        score22.setSize(20, 10);
+        JLabel descriptifMatch2 = new JLabel();
+        descriptifMatch2.setText("****** 2eme match ****** \n" + poule[0].getDescription() + " VS " + poule[2].getDescription());
+
+        p2.add(score21);
+        p2.add(score22);
+        p2.add(descriptifMatch2);
+
+        BoxLayout b2 = new BoxLayout(p2, BoxLayout.PAGE_AXIS);
+
+        if (JOptionPane.YES_OPTION == JOptionPane.showConfirmDialog(null, p2, "2eme match", JOptionPane.YES_NO_OPTION)) {
+
+            try {
+
+                if (Integer.parseInt(score21.getText().trim().toString()) < 0 || Integer.parseInt(score22.getText().trim().toString()) < 0) {
+                    throw new Exception();
+                }
+                // affectation des points en récupérant le contenu des cases
+                poule[0].setNbPointsMatch(Integer.parseInt(score21.getText().trim().toString()));
+                poule[2].setNbPointsMatch(Integer.parseInt(score22.getText().trim().toString()));
+
+//                indicateur = true;
+                // levée de l'exception d'un score négatif
+            } catch (InputMismatchException pbFormat) {
+                JOptionPane.showMessageDialog(null, "Attention, rentrez un nombre entier", "ATTENTION", JOptionPane.ERROR_MESSAGE);
+
+//                indicateur = false;
+            } catch (Exception nbPositif) {
+                JOptionPane.showMessageDialog(null, "Attention, un score de match ne peut pas être négatif", "ATTENTION", JOptionPane.ERROR_MESSAGE);
+//                indicateur = false;
+
+            }
+
+        }
+
         winLose(poule[0], poule[2]);
-        teamGagnante(poule[0], poule[2]);
+        affectationGoalAverage(poule[0], poule[2]);
 
-        System.out.println("3eme match de phase de poule:" + poule[0].getDescription() + " VS "
-                + poule[3].getDescription());
+        //3eme match
+        JPanel p3 = new JPanel();
+        JTextField score31 = new JTextField("    ");
+        score31.setSize(20, 10);
+        JTextField score32 = new JTextField("    ");
+        score32.setSize(20, 10);
+        JLabel descriptifMatch3 = new JLabel();
+        descriptifMatch3.setText("****** 2eme match ****** \n" + poule[0].getDescription() + " VS " + poule[3].getDescription());
+
+        p3.add(score31);
+        p3.add(score32);
+        p3.add(descriptifMatch3);
+
+        BoxLayout b3 = new BoxLayout(p3, BoxLayout.PAGE_AXIS);
+
+        if (JOptionPane.YES_OPTION == JOptionPane.showConfirmDialog(null, p3, "3eme match", JOptionPane.YES_NO_OPTION)) {
+
+            try {
+
+                if (Integer.parseInt(score31.getText().trim().toString()) < 0 || Integer.parseInt(score32.getText().trim().toString()) < 0) {
+                    throw new Exception();
+                }
+                // affectation des points en récupérant le contenu des cases
+                poule[0].setNbPointsMatch(Integer.parseInt(score31.getText().trim().toString()));
+                poule[3].setNbPointsMatch(Integer.parseInt(score32.getText().trim().toString()));
+
+//                indicateur = true;
+                // levée de l'exception d'un score négatif
+            } catch (InputMismatchException pbFormat) {
+                JOptionPane.showMessageDialog(null, "Attention, rentrez un nombre entier", "ATTENTION", JOptionPane.ERROR_MESSAGE);
+
+//                indicateur = false;
+            } catch (Exception nbPositif) {
+                JOptionPane.showMessageDialog(null, "Attention, un score de match ne peut pas être négatif", "ATTENTION", JOptionPane.ERROR_MESSAGE);
+//                indicateur = false;
+
+            }
+        }
+
         winLose(poule[0], poule[3]);
-        teamGagnante(poule[0], poule[3]);
+        affectationGoalAverage(poule[0], poule[3]);
 
-        System.out.println("4eme match de phase de poule:" + poule[1].getDescription() + " VS "
-                + poule[2].getDescription());
+//4eme match
+        JPanel p4 = new JPanel();
+        JTextField score41 = new JTextField("    ");
+        score41.setSize(20, 10);
+        JTextField score42 = new JTextField("    ");
+        score42.setSize(20, 10);
+        JLabel descriptifMatch4 = new JLabel();
+        descriptifMatch4.setText("****** 4eme match ****** \n" + poule[1].getDescription() + " VS " + poule[2].getDescription());
+
+        p4.add(score41);
+        p4.add(score42);
+        p4.add(descriptifMatch4);
+
+        BoxLayout b4 = new BoxLayout(p4, BoxLayout.PAGE_AXIS);
+
+        if (JOptionPane.YES_OPTION == JOptionPane.showConfirmDialog(null, p4, "4eme match", JOptionPane.YES_NO_OPTION)) {
+
+            try {
+
+                if (Integer.parseInt(score41.getText().trim().toString()) < 0 || Integer.parseInt(score42.getText().trim().toString()) < 0) {
+                    throw new Exception();
+                }
+                // affectation des points en récupérant le contenu des cases
+                poule[1].setNbPointsMatch(Integer.parseInt(score41.getText().trim().toString()));
+                poule[2].setNbPointsMatch(Integer.parseInt(score42.getText().trim().toString()));
+
+//                indicateur = true;
+                // levée de l'exception d'un score négatif
+            } catch (InputMismatchException pbFormat) {
+                JOptionPane.showMessageDialog(null, "Attention, rentrez un nombre entier", "ATTENTION", JOptionPane.ERROR_MESSAGE);
+
+//                indicateur = false;
+            } catch (Exception nbPositif) {
+                JOptionPane.showMessageDialog(null, "Attention, un score de match ne peut pas être négatif", "ATTENTION", JOptionPane.ERROR_MESSAGE);
+//                indicateur = false;
+
+            }
+
+        }
+
         winLose(poule[1], poule[2]);
-        teamGagnante(poule[1], poule[2]);
+        affectationGoalAverage(poule[1], poule[2]);
 
-        System.out.println("5eme match de phase de poule:" + poule[1].getDescription() + " VS "
-                + poule[3].getDescription());
+        //5eme match
+        JPanel p5 = new JPanel();
+        JTextField score51 = new JTextField("    ");
+        score51.setSize(20, 10);
+        JTextField score52 = new JTextField("    ");
+        score52.setSize(20, 10);
+        JLabel descriptifMatch5 = new JLabel();
+        descriptifMatch5.setText("****** 5eme match ****** \n" + poule[1].getDescription() + " VS " + poule[3].getDescription());
+
+        p5.add(score51);
+        p5.add(score52);
+        p5.add(descriptifMatch5);
+
+        BoxLayout b5 = new BoxLayout(p5, BoxLayout.PAGE_AXIS);
+
+        if (JOptionPane.YES_OPTION == JOptionPane.showConfirmDialog(null, p5, "5eme match", JOptionPane.YES_NO_OPTION)) {
+
+            try {
+
+                if (Integer.parseInt(score51.getText().trim().toString()) < 0 || Integer.parseInt(score52.getText().trim().toString()) < 0) {
+                    throw new Exception();
+                }
+                // affectation des points en récupérant le contenu des cases
+                poule[1].setNbPointsMatch(Integer.parseInt(score51.getText().trim().toString()));
+                poule[3].setNbPointsMatch(Integer.parseInt(score52.getText().trim().toString()));
+
+//                indicateur = true;
+                // levée de l'exception d'un score négatif
+            } catch (InputMismatchException pbFormat) {
+                JOptionPane.showMessageDialog(null, "Attention, rentrez un nombre entier", "ATTENTION", JOptionPane.ERROR_MESSAGE);
+
+//                indicateur = false;
+            } catch (Exception nbPositif) {
+                JOptionPane.showMessageDialog(null, "Attention, un score de match ne peut pas être négatif", "ATTENTION", JOptionPane.ERROR_MESSAGE);
+//                indicateur = false;
+
+            }
+
+        }
+
         winLose(poule[1], poule[3]);
-        teamGagnante(poule[1], poule[3]);
+        affectationGoalAverage(poule[1], poule[3]);
 
-        System.out.println("6eme match de phase de poule:" + poule[2].getDescription() + " VS "
-                + poule[3].getDescription());
+        //6eme match
+        JPanel p6 = new JPanel();
+        JTextField score61 = new JTextField("    ");
+        score61.setSize(20, 10);
+        JTextField score62 = new JTextField("    ");
+        score62.setSize(20, 10);
+        JLabel descriptifMatch6 = new JLabel();
+        descriptifMatch1.setText("****** 6eme match ****** \n" + poule[2].getDescription() + " VS " + poule[3].getDescription());
+
+        p6.add(score61);
+        p6.add(score62);
+        p6.add(descriptifMatch1);
+
+        BoxLayout b6 = new BoxLayout(p6, BoxLayout.PAGE_AXIS);
+
+        if (JOptionPane.YES_OPTION == JOptionPane.showConfirmDialog(null, p6, "6eme match", JOptionPane.YES_NO_OPTION)) {
+
+            try {
+
+                if (Integer.parseInt(score61.getText().trim().toString()) < 0 || Integer.parseInt(score62.getText().trim().toString()) < 0) {
+                    throw new Exception();
+                }
+                // affectation des points en récupérant le contenu des cases
+                poule[2].setNbPointsMatch(Integer.parseInt(score61.getText().trim().toString()));
+                poule[3].setNbPointsMatch(Integer.parseInt(score62.getText().trim().toString()));
+
+//                indicateur = true;
+                // levée de l'exception d'un score négatif
+            } catch (InputMismatchException pbFormat) {
+                JOptionPane.showMessageDialog(null, "Attention, rentrez un nombre entier", "ATTENTION", JOptionPane.ERROR_MESSAGE);
+
+//                indicateur = false;
+            } catch (Exception nbPositif) {
+                JOptionPane.showMessageDialog(null, "Attention, un score de match ne peut pas être négatif", "ATTENTION", JOptionPane.ERROR_MESSAGE);
+//                indicateur = false;
+
+            }
+
+        }
+
         winLose(poule[2], poule[3]);
-        teamGagnante(poule[2], poule[3]);
+        affectationGoalAverage(poule[2], poule[3]);
+
     }
 
     // methode qui va trier les poules en fct du nombre de points de chaques
@@ -119,24 +332,22 @@ public class fTournoiPoule extends javax.swing.JDialog {
         listeApresPoule.add(poule[3]);
     }
 
-    public Equipe teamGagnante(Equipe teamUn, Equipe teamDeux) {
-        Equipe EquipeGagnante;
+    public void affectationGoalAverage(Equipe teamUn, Equipe teamDeux) {
+        //Equipe EquipeGagnante;
         // affectation des goal average
         teamUn.setGoalAverage(teamUn.getNbPointsMatch()
                 - teamDeux.getNbPointsMatch());
         teamDeux.setGoalAverage(teamDeux.getNbPointsMatch()
                 - teamUn.getNbPointsMatch());
-        if (teamDeux.getNbPointsMatch() < teamUn.getNbPointsMatch()) {
-            EquipeGagnante = teamUn;
-        } else {
-            EquipeGagnante = teamDeux;
-        }
-        return EquipeGagnante;
+//        if (teamDeux.getNbPointsMatch() < teamUn.getNbPointsMatch()) {
+//            return EquipeGagnante = teamUn;
+//        } else {
+//           return  EquipeGagnante = teamDeux;
+//        }
+
     }
 
     public void winLose(Equipe eq1, Equipe eq2) {
-
-        saisieScoresOptionPane(eq1, eq2);
 
         if (eq1.getNbPointsMatch() < eq2.getNbPointsMatch()) {
             eq2.setNbPointsTournois(eq2.getNbPointsTournois() + 3);
@@ -153,38 +364,6 @@ public class fTournoiPoule extends javax.swing.JDialog {
 
     }
 
-    public void saisieScoresOptionPane(Equipe eq1, Equipe eq2) {
-        // indicateur qui laisse passer à la saisie suivante que si la
-        // derniere est conforme
-//        boolean indicateur = false;
-
-        int score = 0;// score du match
-
-        try {
-            // pas d'autorisation de score négatif
-            if (score < 0) {
-                throw new Exception();
-            }
-            // affectation des points en récupérant le contenu des cases
-            score = Integer.parseInt((String) table.getValueAt(0, 1 + 1)); // 0 et 1 juste pour supprimer les erreurs et pouvoir lancer le programme
-            eq1.setNbPointsMatch(score);
-            score = Integer.parseInt((String) table.getValueAt(0 + 1, 1 + 1));
-            eq2.setNbPointsMatch(score);
-
-//                indicateur = true;
-            // levée de l'exception d'un score négatif
-        } catch (InputMismatchException pbFormat) {
-            JOptionPane.showMessageDialog(null, "Attention, rentrez un nombre entier", "ATTENTION", JOptionPane.ERROR_MESSAGE);
-
-//                indicateur = false;
-        } catch (Exception nbPositif) {
-            JOptionPane.showMessageDialog(null, "Attention, un score de match ne peut pas être négatif", "ATTENTION", JOptionPane.ERROR_MESSAGE);
-//                indicateur = false;
-
-        }
-
-    }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -196,10 +375,12 @@ public class fTournoiPoule extends javax.swing.JDialog {
 
         jLabel1 = new javax.swing.JLabel();
         bExit = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
+        bLancerTourPoule = new javax.swing.JButton();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 32767));
         jScrollPane1 = new javax.swing.JScrollPane();
         tPoule = new javax.swing.JTable();
+        bContinuer = new javax.swing.JButton();
+        lVerif = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -208,7 +389,12 @@ public class fTournoiPoule extends javax.swing.JDialog {
 
         bExit.setText("Exit");
 
-        jButton1.setText("Valider les scores et passer au tour suivant ");
+        bLancerTourPoule.setText("Lancer tour poule");
+        bLancerTourPoule.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bLancerTourPouleActionPerformed(evt);
+            }
+        });
 
         tPoule.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -217,26 +403,47 @@ public class fTournoiPoule extends javax.swing.JDialog {
             new String [] {
                 "Poules"
             }
-        ));
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
         jScrollPane1.setViewportView(tPoule);
+
+        bContinuer.setText("Continuer le tournoi");
+        bContinuer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bContinuerActionPerformed(evt);
+            }
+        });
+
+        lVerif.setText("        ");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(188, Short.MAX_VALUE)
+                .addContainerGap(181, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jButton1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(bExit)
-                        .addContainerGap())
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel1)
                             .addComponent(filler1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(182, 182, 182))))
+                        .addGap(182, 182, 182))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(lVerif)
+                            .addComponent(bContinuer))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(bLancerTourPoule)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(bExit)
+                        .addContainerGap())))
             .addGroup(layout.createSequentialGroup()
                 .addGap(50, 50, 50)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -249,17 +456,43 @@ public class fTournoiPoule extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel1)
                     .addComponent(filler1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(19, 19, 19)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 372, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(19, 19, 19)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 372, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(94, 94, 94)
+                        .addComponent(lVerif)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(bExit)
-                    .addComponent(jButton1))
+                    .addComponent(bLancerTourPoule)
+                    .addComponent(bContinuer))
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void bLancerTourPouleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bLancerTourPouleActionPerformed
+        for (int i = 0; i < poule.getListePoulesTournoi().size(); i++) {
+            matchPoule(poule.getListePoulesTournoi().get(i));
+            gagnantsPoule(poule.getListePoulesTournoi().get(i), listeApresPoule);
+        }
+        bContinuer.setVisible(true);
+        lVerif.setText(listeApresPoule.get(0).getDescription() + "   ET   " +  listeApresPoule.get(1).getDescription());
+
+    }//GEN-LAST:event_bLancerTourPouleActionPerformed
+
+    private void bContinuerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bContinuerActionPerformed
+
+        AjoutColonne(table, "Nouveau Tour !");
+        AjoutColonne(table, "Scores: ");
+
+        for (int i = 0; i < listeApresPoule.size(); i++) {
+            table.setValueAt(listeApresPoule.get(i).getDescription(), i, 1);
+        }
+    }//GEN-LAST:event_bContinuerActionPerformed
 
     /**
      * @param args the command line arguments
@@ -304,11 +537,13 @@ public class fTournoiPoule extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton bContinuer;
     private javax.swing.JButton bExit;
+    private javax.swing.JButton bLancerTourPoule;
     private javax.swing.Box.Filler filler1;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lVerif;
     private javax.swing.JTable tPoule;
     // End of variables declaration//GEN-END:variables
 }
